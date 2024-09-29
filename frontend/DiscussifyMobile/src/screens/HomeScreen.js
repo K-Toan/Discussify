@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { theme } from '../components/theme';
 
 const posts = [
     {
@@ -68,36 +69,37 @@ const posts = [
     },
 ];
 
-
 export default function HomeScreen() {
     return (
-        <View style={{ padding: 10 }}>
+        <View style={{ paddingLeft: 10, paddingRight: 10, backgroundColor: theme.background }}>
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                    <View style={{ padding: 0, paddingBottom: 10, borderBottomWidth: 1, marginBottom: 10 }}>
-                        {/* Row 1: Avatar, User Type (u/ or r/), Time, and 3-dots Icon */}
+                    <View style={{ padding: 0, paddingBottom: 10, borderBottomWidth: 1, borderColor: theme.borderColor, marginBottom: 10 }}>
+                        {/* Row 1: Avatar, User Type (u/ or r/), Time */}
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Image
                                     source={{ uri: item.avatar }}
                                     style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10 }}
                                 />
-                                <Text style={{ fontWeight: 'bold' }}>
-                                    {item.userType}{item.userName}
-                                </Text>
-                                <Text style={{ marginLeft: 10, color: 'gray' }}>{item.timePosted}</Text>
+                                <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                                    <Text style={{ fontWeight: 'bold', color: theme.text }}>
+                                        {item.userType}{item.userName}
+                                    </Text>
+                                    <Text style={{ marginLeft: 0, fontSize: 12, color: 'gray' }}>{item.timePosted}</Text>
+                                </View>
                             </View>
                         </View>
 
                         {/* Row 2: Post Title */}
-                        <Text style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 5 }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 0, color: theme.text }}>
                             {item.title}
                         </Text>
 
                         {/* Row 3: Post Content */}
-                        <Text style={{ marginBottom: 5 }}>
+                        <Text style={{ marginBottom: 0, color: theme.subtext }}>
                             {item.content}
                         </Text>
 
@@ -111,31 +113,41 @@ export default function HomeScreen() {
                         )}
 
                         {/* Row 4: Upvote, Downvote, Comments, Share, and 3-dots Icon */}
-                        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                            {/* Upvote */}
-                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
-                                <Ionicons name="arrow-up-outline" size={24} color="gray" />
-                                <Text style={{ marginLeft: 5 }}>{item.upvotes}</Text>
-                            </TouchableOpacity>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
+                            {/* Left Group: Upvote, Downvote, Comments */}
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                {/* Upvote */}
+                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
+                                    <Ionicons name="arrow-up-outline" size={20} color={theme.iconColor} />
+                                    <Text style={{ marginLeft: 2, color: theme.text, fontSize: 12 }}>{item.upvotes}</Text>
+                                </TouchableOpacity>
 
-                            {/* Downvote */}
-                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
-                                <Ionicons name="arrow-down-outline" size={24} color="gray" />
-                                <Text style={{ marginLeft: 5 }}>{item.downvotes}</Text>
-                            </TouchableOpacity>
+                                {/* Downvote */}
+                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
+                                    <Ionicons name="arrow-down-outline" size={20} color={theme.iconColor} />
+                                    <Text style={{ marginLeft: 2, color: theme.text, fontSize: 12 }}>{item.downvotes}</Text>
+                                </TouchableOpacity>
 
-                            {/* Comments */}
-                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
-                                <Ionicons name="chatbubble-outline" size={24} color="gray" />
-                                <Text style={{ marginLeft: 5 }}>{item.comments}</Text>
-                            </TouchableOpacity>
+                                {/* Comments */}
+                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
+                                    <Ionicons name="chatbubble-outline" size={20} color={theme.iconColor} />
+                                    <Text style={{ marginLeft: 4, color: theme.text, fontSize: 12 }}>{item.comments}</Text>
+                                </TouchableOpacity>
+                            </View>
 
-                            {/* Share */}
-                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
-                                <Ionicons name="share-outline" size={24} color="gray" />
-                                <Text style={{ marginLeft: 5 }}>Share</Text>
-                            </TouchableOpacity>
+                            {/* Right Group: Share and 3-dots Menu */}
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                {/* Share */}
+                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
+                                    <Ionicons name="share-outline" size={20} color={theme.iconColor} />
+                                    <Text style={{ marginLeft: 4, color: theme.text }}>{/*Share*/}</Text>
+                                </TouchableOpacity>
 
+                                {/* 3-dots menu */}
+                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Ionicons name="ellipsis-horizontal" size={20} color={theme.iconColor} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 )}
