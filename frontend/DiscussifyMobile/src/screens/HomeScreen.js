@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, Text, FlatList, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../components/theme';
 
@@ -82,7 +82,7 @@ export default function HomeScreen() {
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Image
                                     source={{ uri: item.avatar }}
-                                    style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10 }}
+                                    style={{ width: 36, height: 36, borderRadius: 20, marginRight: 10 }}
                                 />
                                 <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
                                     <Text style={{ fontWeight: 'bold', color: theme.text }}>
