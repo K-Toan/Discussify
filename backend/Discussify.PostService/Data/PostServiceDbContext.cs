@@ -5,8 +5,7 @@ namespace Discussify.PostService.Data;
 
 public class PostServiceDbContext : DbContext
 {
-    public PostServiceDbContext() { }
-    public PostServiceDbContext(DbContextOptions options) : base(options) { }
+    public PostServiceDbContext(DbContextOptions<PostServiceDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

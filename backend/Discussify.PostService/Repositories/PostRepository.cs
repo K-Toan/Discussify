@@ -2,6 +2,7 @@ using Discussify.PostService.Data;
 using Discussify.PostService.Models;
 using Discussify.PostService.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Discussify.PostService.Repositories;
 
@@ -16,27 +17,56 @@ public class PostRepository : IPostRepository
 
     public async Task<Post> GetByIdAsync(int postId)
     {
-        return await _context.Set<Post>().FindAsync(postId);
+        return await _context.Posts.FindAsync(postId);
     }
 
     public async Task<IEnumerable<Post>> GetByUserIdAsync(int userId)
     {
-        return await _context.Set<Post>().Where(p => p.UserId == userId).ToListAsync();
+        return await _context.Posts.Where(p => p.UserId == userId).ToListAsync();
     }
 
     public async Task<IEnumerable<Post>> GetByCommunityIdAsync(int communityId)
     {
-        return await _context.Set<Post>().Where(p => p.CommunityId == communityId).ToListAsync();
+        return await _context.Posts.Where(p => p.CommunityId == communityId).ToListAsync();
+    }
+
+    public async Task<IEnumerable<Post>> GetAsync(Expression<Func<Post, bool>> filter = null,
+                                                  Func<IQueryable<Post>, IOrderedQueryable<Post>> orderBy = null,
+                                                  string includeProperties = "")
+    {
+        IQueryable<Post> query = _context.Posts;
+
+        // filter
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
+        // include properties
+        foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            query = query.Include(includeProperty);
+        }
+
+        // order
+        if (orderBy != null)
+        {
+            return await orderBy(query).ToListAsync();
+        }
+        else
+        {
+            return await query.ToListAsync();
+        }
     }
 
     public async Task AddAsync(Post post)
     {
-        await _context.Set<Post>().AddAsync(post);
+        await _context.Posts.AddAsync(post);
     }
 
     public async Task UpdateAsync(Post post)
     {
-        _context.Set<Post>().Update(post);
+        _context.Posts.Update(post);
     }
 
     public async Task DeleteAsync(int postId)
@@ -44,7 +74,7 @@ public class PostRepository : IPostRepository
         var post = await GetByIdAsync(postId);
         if (post != null)
         {
-            _context.Set<Post>().Remove(post);
+            _context.Posts.Remove(post);
         }
     }
 

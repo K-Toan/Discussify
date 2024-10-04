@@ -7,16 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 
-var app = builder.Build();
-
 builder.Services.AddControllers();
-// builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<PostServiceDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostServiceDB"));
 });
 
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+
+var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.MapControllers();
