@@ -7,6 +7,7 @@ public interface ICommentRepository
 {
     Task<Comment> GetByIdAsync(int postId);
     Task<IEnumerable<Comment>> GetByPostIdAsync(int postId);
+    Task<IEnumerable<Comment>> GetByUserIdAsync(int userId);
     Task<IEnumerable<Comment>> GetAsync(Expression<Func<Comment, bool>> filter = null, Func<IQueryable<Comment>, IOrderedQueryable<Comment>> orderBy = null,string includeProperties = "");
     Task AddAsync(Comment post);
     Task UpdateAsync(Comment post);

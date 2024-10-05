@@ -20,9 +20,14 @@ public class CommentRepository : ICommentRepository
         return await _context.Comments.FindAsync(commentId);
     }
 
-    public async Task<IEnumerable<Comment>> GetByPostIdAsync(int commentId)
+    public async Task<IEnumerable<Comment>> GetByPostIdAsync(int postId)
     {
-        return await _context.Comments.Where(c => c.CommentId == commentId).ToListAsync();
+        return await _context.Comments.Where(c => c.PostId == postId).ToListAsync();
+    }
+
+    public async Task<IEnumerable<Comment>> GetByUserIdAsync(int userId)
+    {
+        return await _context.Comments.Where(c => c.UserId == userId).ToListAsync();
     }
 
     public async Task<IEnumerable<Comment>> GetAsync(Expression<Func<Comment, bool>> filter = null,
@@ -57,11 +62,13 @@ public class CommentRepository : ICommentRepository
     public async Task AddAsync(Comment comment)
     {
         await _context.Comments.AddAsync(comment);
+        await SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Comment comment)
     {
         _context.Comments.Update(comment);
+        await SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int commentId)
