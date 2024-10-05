@@ -101,9 +101,9 @@ public class CommentsController : ControllerBase
             return NotFound();
         }
 
-        // comment.DeleteAt = DateTime.UtcNow;
+        comment.DeleteAt = DateTime.UtcNow;
 
-        await _commentRepository.DeleteAsync(commentId);
+        await _commentRepository.UpdateAsync(comment);
 
         return NoContent();
     }
