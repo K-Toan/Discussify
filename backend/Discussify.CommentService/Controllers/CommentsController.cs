@@ -37,10 +37,10 @@ public class CommentsController : ControllerBase
     public async Task<IActionResult> GetByUserId(int userId)
     {
         var comments = await _commentRepository.GetByUserIdAsync(userId);
-        if (comments == null || !comments.Any())
-        {
-            return NotFound();
-        }
+
+        // if (comments == null || !comments.Any())
+        //     return NotFound();
+
         var commentDtos = _mapper.Map<IEnumerable<CommentDto>>(comments);
         return Ok(commentDtos);
     }
@@ -55,6 +55,9 @@ public class CommentsController : ControllerBase
         }
 
         // check if post with post id is existed
+        // ...
+
+        // check if parent comment is existed if parentCommentId != null
         // ...
 
         // check if user exists and get user id
@@ -73,15 +76,12 @@ public class CommentsController : ControllerBase
     public async Task<IActionResult> UpdateComment(int commentId, [FromBody] CommentUpdateDto commentUpdateDto)
     {
         if (!ModelState.IsValid)
-        {
             return BadRequest();
-        }
 
         var comment = await _commentRepository.GetByIdAsync(commentId);
+        
         if (comment == null)
-        {
             return NotFound();
-        }
 
         _mapper.Map(commentUpdateDto, comment);
         comment.UpdateAt = DateTime.UtcNow;
@@ -96,10 +96,9 @@ public class CommentsController : ControllerBase
     public async Task<IActionResult> DeleteComment(int commentId)
     {
         var comment = await _commentRepository.GetByIdAsync(commentId);
+
         if (comment == null)
-        {
             return NotFound();
-        }
 
         comment.DeleteAt = DateTime.UtcNow;
 
