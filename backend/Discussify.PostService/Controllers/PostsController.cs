@@ -31,11 +31,11 @@ public class PostsController : ControllerBase
         return Ok(postDtos);
     }
 
-    // GET: api/posts/{id}
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetPostById(int id)
+    // GET: api/posts/{postId}
+    [HttpGet("{postId}")]
+    public async Task<IActionResult> GetPostById(int postId)
     {
-        var post = await _postRepository.GetByIdAsync(id);
+        var post = await _postRepository.GetByIdAsync(postId);
         if (post == null)
         {
             return NotFound();
@@ -63,16 +63,16 @@ public class PostsController : ControllerBase
         return CreatedAtAction(nameof(GetPostById), new { id = post.PostId }, postDto);
     }
 
-    // PUT: api/posts/{id}
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdatePost(int id, [FromBody] PostUpdateDto postUpdateDto)
+    // PUT: api/posts/{postId}
+    [HttpPut("{postId}")]
+    public async Task<IActionResult> UpdatePost(int postId, [FromBody] PostUpdateDto postUpdateDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var post = await _postRepository.GetByIdAsync(id);
+        var post = await _postRepository.GetByIdAsync(postId);
         if (post == null)
         {
             return NotFound();
@@ -81,17 +81,17 @@ public class PostsController : ControllerBase
         _mapper.Map(postUpdateDto, post);
         post.UpdateAt = DateTime.UtcNow;
 
-        _postRepository.UpdateAsync(post);
+        await _postRepository.UpdateAsync(post);
         await _postRepository.SaveChangesAsync();
 
         return NoContent();
     }
 
-    // DELETE: api/posts/{id}
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePost(int id)
+    // DELETE: api/posts/{postId}
+    [HttpDelete("{postId}")]
+    public async Task<IActionResult> DeletePost(int postId)
     {
-        var post = await _postRepository.GetByIdAsync(id);
+        var post = await _postRepository.GetByIdAsync(postId);
         if (post == null)
         {
             return NotFound();
@@ -100,7 +100,7 @@ public class PostsController : ControllerBase
         post.DeleteAt = DateTime.UtcNow;
 
         // await _postRepository.DeleteAsync(id);
-        _postRepository.UpdateAsync(post);
+        await _postRepository.UpdateAsync(post);
         await _postRepository.SaveChangesAsync();
 
         return NoContent();
