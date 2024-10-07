@@ -1,6 +1,7 @@
 using System.Text;
 using Discussify.IdentityService.Data;
 using Discussify.IdentityService.Models;
+using Discussify.IdentityService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +46,8 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
+
+builder.Services.AddScoped<JwtService>();
 
 var app = builder.Build();
 
