@@ -31,7 +31,7 @@ public class AuthenticationController : ControllerBase
             if (await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
                 var token = _jwtService.CreateToken(user);
-                return Ok();
+                return Ok(token);
             }
             // password doesn't match
             else

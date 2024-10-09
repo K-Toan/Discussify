@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\help.html" />
+  </ItemGroup>
+  
 </Project>
