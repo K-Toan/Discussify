@@ -15,5 +15,5 @@ public class IdentityServiceDbContext : IdentityDbContext<AppUser>
         base.OnModelCreating(builder);
     }
 
-    public DbSet<AppUser> AppUsers;
+    public DbSet<AppUser> AppUsers { get; set; }
 }

@@ -1,5 +1,6 @@
 using System.Text;
 using Discussify.IdentityService.Data;
+using Discussify.IdentityService.Interfaces;
 using Discussify.IdentityService.Models;
 using Discussify.IdentityService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<IdentityServiceDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityServiceDB"));
@@ -48,6 +50,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 
 var app = builder.Build();
 
