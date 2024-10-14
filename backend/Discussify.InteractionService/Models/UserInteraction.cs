@@ -8,8 +8,7 @@ namespace Discussify.InteractionService.Models;
 
 public class UserInteraction
 {
-    [Key]
-    [BsonElement("_id")]
+    [BsonId]
     public ObjectId InteractionId { get; set; }
 
     [NotNull]

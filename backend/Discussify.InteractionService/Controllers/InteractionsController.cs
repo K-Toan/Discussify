@@ -35,36 +35,45 @@ public class InteractionsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PerformInteraction(UserInteractionCreateDto request)
     {
-        var existingInteraction = await _interactionRepository.GetInteractionByUserAndTargetId(request.UserId, request.TargetId);
+        var userInteraction = _mapper.Map<UserInteraction>(request);
 
-        // already interacted
-        if (existingInteraction != null)
+        // user comment on post/other comment
+        if (request.Type == InteractionType.Comment)
         {
-            // if interaction is upvote/downvote
-            if(existingInteraction.Type != InteractionType.Comment)
+            userInteraction.CreateAt = DateTime.UtcNow;
+            await _interactionRepository.AddAsync(userInteraction);
+
+            return Ok(userInteraction);
+        }
+        // interaction is upvote/downvote
+        else
+        {
+            var existingInteraction = await _interactionRepository.GetInteractionByUserAndTargetId(request.UserId, request.TargetId);
+
+            // already existed a interaction before
+            if (existingInteraction != null)
             {
-                if(existingInteraction.Type.Equals(request.Type))
+                // if type is the same as old interaction
+                if (existingInteraction.Type.Equals(request.Type))
                 {
-                    // remove interaction
+                    // remove old interaction
                     await _interactionRepository.DeleteAsync(existingInteraction.InteractionId);
-                    return Ok();
                 }
                 else
                 {
                     // update new interaction
-                    await _interactionRepository.UpdateAsync(_mapper.Map<UserInteraction>(request));
-                    return Ok();
+                    existingInteraction.CreateAt = DateTime.UtcNow;
+                    existingInteraction.Type = request.Type;
+                    await _interactionRepository.UpdateAsync(existingInteraction);
                 }
+                return Ok(existingInteraction);
             }
-                
-            // if interaction is comment, just skip
+            else
+            {
+                userInteraction.CreateAt = DateTime.UtcNow;
+                await _interactionRepository.AddAsync(userInteraction);
+            }
+            return Ok(userInteraction);
         }
-
-        var userInteraction = _mapper.Map<UserInteraction>(request);
-
-        userInteraction.CreateAt = DateTime.UtcNow;
-        await _interactionRepository.AddAsync(userInteraction);
-
-        return Ok(userInteraction);
     }
 }

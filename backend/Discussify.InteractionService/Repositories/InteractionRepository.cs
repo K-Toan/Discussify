@@ -54,16 +54,14 @@ public class InteractionRepository : IInteractionRepository
 
     public async Task UpdateAsync(UserInteraction interaction)
     {
-        var filter = Builders<UserInteraction>.Filter.Eq(i => i.InteractionId, interaction.InteractionId);
+        var filter = Builders<UserInteraction>.Filter
+            .Eq(i => i.InteractionId, interaction.InteractionId);
 
         var update = Builders<UserInteraction>.Update
-            .Set(i => i.Type, interaction.Type)
-            .Set(i => i.TargetId, interaction.TargetId)
-            .Set(i => i.UserId, interaction.UserId)
-            .Set(i => i.CreateAt, interaction.CreateAt);
+            .Set(i => i.Type, interaction.Type);
 
         var result = await _context.UserInteractions.UpdateOneAsync(filter, update);
-
+        Console.WriteLine(result.ModifiedCount);
     }
 
     public async Task DeleteAsync(ObjectId interactionId)
