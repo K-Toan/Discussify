@@ -15,6 +15,7 @@ builder.Services.AddDbContext<PostServiceDbContext>(options =>
 });
 
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
 
 var app = builder.Build();
 

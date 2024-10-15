@@ -77,7 +77,8 @@ public class PostRepository : IPostRepository
         if (post != null)
         {
             post.DeletedAt = DateTime.UtcNow;
-            _context.Posts.Remove(post);
+            _context.Posts.Update(post);
+            // _context.Posts.Remove(post);
         }
     }
 

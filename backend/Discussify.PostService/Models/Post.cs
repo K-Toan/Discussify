@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Discussify.PostService.Models;
@@ -12,6 +13,7 @@ public class Post
     public int UserId { get; set; }
 
     [AllowNull]
+    [ForeignKey("CommunityId")]
     public int? CommunityId { get; set; }
 
     [Required]
