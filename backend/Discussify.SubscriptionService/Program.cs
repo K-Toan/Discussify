@@ -1,4 +1,5 @@
 using Discussify.PostService.Data;
+using Discussify.SubscriptionService.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ builder.Services.AddDbContext<SubscriptionServiceDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("SubscriptionServiceDB"));
 });
+
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
 var app = builder.Build();
 
