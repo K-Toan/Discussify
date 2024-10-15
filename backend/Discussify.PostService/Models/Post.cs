@@ -28,11 +28,11 @@ public class Post
     public int Downvote { get; set; }
 
     [Required]
-    public DateTime CreateAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     [AllowNull]
-    public DateTime? UpdateAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     [AllowNull]
-    public DateTime? DeleteAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

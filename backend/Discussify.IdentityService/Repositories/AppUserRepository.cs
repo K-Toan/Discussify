@@ -32,7 +32,7 @@ public class AppUserRepository : IAppUserRepository
 
     public async Task<AppUser> UpdateAsync(AppUser user)
     {
-        user.UpdateAt = DateTime.UtcNow;
+        user.UpdatedAt = DateTime.UtcNow;
         _context.AppUsers.Update(user);
         await _context.SaveChangesAsync();
         return user;
@@ -45,7 +45,7 @@ public class AppUserRepository : IAppUserRepository
         if (user == null)
             return false;
 
-        user.DeleteAt = DateTime.UtcNow;
+        user.DeletedAt = DateTime.UtcNow;
         _context.AppUsers.Update(user);
         await _context.SaveChangesAsync();
         return true;

@@ -48,6 +48,7 @@ public class InteractionRepository : IInteractionRepository
 
     public async Task AddAsync(UserInteraction interaction)
     {
+        interaction.CreatedAt = DateTime.UtcNow;
         interaction.InteractionId = ObjectId.GenerateNewId();
         await _context.UserInteractions.InsertOneAsync(interaction);
     }
@@ -58,7 +59,8 @@ public class InteractionRepository : IInteractionRepository
             .Eq(i => i.InteractionId, interaction.InteractionId);
 
         var update = Builders<UserInteraction>.Update
-            .Set(i => i.Type, interaction.Type);
+            .Set(i => i.Type, interaction.Type)
+            .Set(i => i.CreatedAt, DateTime.UtcNow);
 
         var result = await _context.UserInteractions.UpdateOneAsync(filter, update);
         Console.WriteLine(result.ModifiedCount);

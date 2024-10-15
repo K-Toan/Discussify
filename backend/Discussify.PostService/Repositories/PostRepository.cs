@@ -61,11 +61,13 @@ public class PostRepository : IPostRepository
 
     public async Task AddAsync(Post post)
     {
+        post.CreatedAt = DateTime.UtcNow;
         await _context.Posts.AddAsync(post);
     }
 
     public async Task UpdateAsync(Post post)
     {
+        post.UpdatedAt = DateTime.UtcNow;
         _context.Posts.Update(post);
     }
 
@@ -74,6 +76,7 @@ public class PostRepository : IPostRepository
         var post = await GetByIdAsync(postId);
         if (post != null)
         {
+            post.DeletedAt = DateTime.UtcNow;
             _context.Posts.Remove(post);
         }
     }

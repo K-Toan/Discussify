@@ -9,7 +9,7 @@ public class PostDto
     public string Content { get; set; }
     public int Upvote { get; set; }
     public int Downvote { get; set; }
-    public DateTime CreateAt { get; set; }
-    public DateTime? UpdateAt { get; set; }
-    public DateTime? DeleteAt { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

@@ -64,7 +64,6 @@ public class CommentsController : ControllerBase
         // ...
 
         var comment = _mapper.Map<Comment>(commentCreateDto);
-        comment.CreateAt = DateTime.UtcNow;
 
         await _commentRepository.AddAsync(comment);
 
@@ -84,7 +83,6 @@ public class CommentsController : ControllerBase
             return NotFound();
 
         _mapper.Map(commentUpdateDto, comment);
-        comment.UpdateAt = DateTime.UtcNow;
 
         await _commentRepository.UpdateAsync(comment);
 
@@ -100,9 +98,7 @@ public class CommentsController : ControllerBase
         if (comment == null)
             return NotFound();
 
-        comment.DeleteAt = DateTime.UtcNow;
-
-        await _commentRepository.UpdateAsync(comment);
+        await _commentRepository.DeleteAsync(commentId);
 
         return NoContent();
     }

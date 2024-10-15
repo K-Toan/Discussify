@@ -21,6 +21,6 @@ public class UserInteraction
     public InteractionType Type { get; set; }
 
     [NotNull]
-    public DateTime CreateAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
 }

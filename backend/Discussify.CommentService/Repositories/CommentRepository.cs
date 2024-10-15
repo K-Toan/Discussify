@@ -61,12 +61,14 @@ public class CommentRepository : ICommentRepository
 
     public async Task AddAsync(Comment comment)
     {
+        comment.CreatedAt = DateTime.UtcNow;
         await _context.Comments.AddAsync(comment);
         await SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Comment comment)
     {
+        comment.UpdatedAt = DateTime.UtcNow;
         _context.Comments.Update(comment);
         await SaveChangesAsync();
     }
@@ -74,9 +76,15 @@ public class CommentRepository : ICommentRepository
     public async Task DeleteAsync(int commentId)
     {
         var comment = await GetByIdAsync(commentId);
+
         if (comment != null)
         {
-            _context.Comments.Remove(comment);
+            // update deleted at
+            comment.DeletedAt = DateTime.UtcNow;
+            await UpdateAsync(comment);
+
+            // delete
+            // _context.Comments.Remove(comment);
         }
     }
 

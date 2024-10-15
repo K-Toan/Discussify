@@ -54,7 +54,6 @@ public class PostsController : ControllerBase
         }
 
         var post = _mapper.Map<Post>(postCreateDto);
-        post.CreateAt = DateTime.UtcNow;
 
         await _postRepository.AddAsync(post);
         await _postRepository.SaveChangesAsync();
@@ -79,7 +78,6 @@ public class PostsController : ControllerBase
         }
 
         _mapper.Map(postUpdateDto, post);
-        post.UpdateAt = DateTime.UtcNow;
 
         await _postRepository.UpdateAsync(post);
         await _postRepository.SaveChangesAsync();
@@ -96,8 +94,6 @@ public class PostsController : ControllerBase
         {
             return NotFound();
         }
-
-        post.DeleteAt = DateTime.UtcNow;
 
         // await _postRepository.DeleteAsync(id);
         await _postRepository.UpdateAsync(post);

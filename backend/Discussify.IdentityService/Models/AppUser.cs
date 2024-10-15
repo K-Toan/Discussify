@@ -8,8 +8,8 @@ public class AppUser : IdentityUser
     public DateTime CreatedAt { get; set; }
 
     [AllowNull]
-    public DateTime? UpdateAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     
     [AllowNull]
-    public DateTime? DeleteAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

@@ -40,7 +40,6 @@ public class InteractionsController : ControllerBase
         // user comment on post/other comment
         if (request.Type == InteractionType.Comment)
         {
-            userInteraction.CreateAt = DateTime.UtcNow;
             await _interactionRepository.AddAsync(userInteraction);
 
             return Ok(userInteraction);
@@ -62,7 +61,6 @@ public class InteractionsController : ControllerBase
                 else
                 {
                     // update new interaction
-                    existingInteraction.CreateAt = DateTime.UtcNow;
                     existingInteraction.Type = request.Type;
                     await _interactionRepository.UpdateAsync(existingInteraction);
                 }
@@ -70,7 +68,6 @@ public class InteractionsController : ControllerBase
             }
             else
             {
-                userInteraction.CreateAt = DateTime.UtcNow;
                 await _interactionRepository.AddAsync(userInteraction);
             }
             return Ok(userInteraction);
