@@ -22,6 +22,42 @@ namespace Discussify.PostService.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Discussify.PostService.Models.Community", b =>
+                {
+                    b.Property<int>("CommunityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CommunityId"));
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(750)
+                        .HasColumnType("character varying(750)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("CommunityId");
+
+                    b.ToTable("Communities");
+                });
+
             modelBuilder.Entity("Discussify.PostService.Models.Post", b =>
                 {
                     b.Property<int>("PostId")
@@ -30,6 +66,10 @@ namespace Discussify.PostService.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PostId"));
 
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int?>("CommunityId")
                         .HasColumnType("integer");
 
@@ -37,10 +77,10 @@ namespace Discussify.PostService.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("DeleteAt")
+                    b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Downvote")
@@ -51,13 +91,10 @@ namespace Discussify.PostService.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.Property<DateTime?>("UpdateAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Upvote")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("PostId");

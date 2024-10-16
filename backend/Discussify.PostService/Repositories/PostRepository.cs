@@ -20,9 +20,9 @@ public class PostRepository : IPostRepository
         return await _context.Posts.FindAsync(postId);
     }
 
-    public async Task<IEnumerable<Post>> GetByUserIdAsync(int userId)
+    public async Task<IEnumerable<Post>> GetByUserIdAsync(string userId)
     {
-        return await _context.Posts.Where(p => p.UserId == userId).ToListAsync();
+        return await _context.Posts.Where(p => p.AuthorId == userId).ToListAsync();
     }
 
     public async Task<IEnumerable<Post>> GetByCommunityIdAsync(int communityId)
@@ -63,12 +63,14 @@ public class PostRepository : IPostRepository
     {
         post.CreatedAt = DateTime.UtcNow;
         await _context.Posts.AddAsync(post);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Post post)
     {
         post.UpdatedAt = DateTime.UtcNow;
         _context.Posts.Update(post);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int postId)
@@ -80,6 +82,7 @@ public class PostRepository : IPostRepository
             _context.Posts.Update(post);
             // _context.Posts.Remove(post);
         }
+        await SaveChangesAsync();
     }
 
     public async Task SaveChangesAsync()

@@ -9,10 +9,14 @@ public class Community
     public int CommunityId { get; set; }
 
     [Required]
+    public string AuthorId { get; set; }
+
+    [Required]
     [StringLength(250, ErrorMessage = "Name can't be longer than 250 characters.")] 
     public string Name { get; set; }
 
     [Required]
+    [StringLength(750, ErrorMessage = "Description can't be longer than 750 characters.")] 
     public string Description { get; set; }
 
     [Required]

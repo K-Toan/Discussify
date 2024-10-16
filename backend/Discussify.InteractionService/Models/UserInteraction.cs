@@ -12,7 +12,7 @@ public class UserInteraction
     public ObjectId InteractionId { get; set; }
 
     [NotNull]
-    public int UserId { get; set; }
+    public string UserId { get; set; }
 
     [NotNull]
     public int TargetId { get; set; }

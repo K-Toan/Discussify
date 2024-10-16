@@ -1,9 +1,10 @@
 using AutoMapper;
-using MassTransit;
-using Discussify.PostService.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Discussify.Protos;
 using Discussify.PostService.Models.Dtos;
 using Discussify.PostService.Models;
+using Discussify.PostService.Services;
+using Discussify.PostService.Interfaces;
 
 namespace Discussify.PostService.Controllers;
 
@@ -13,13 +14,15 @@ public class PostsController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly IPostRepository _postRepository;
-    // private readonly IPublishEndpoint _publishEndpoint;
+    private readonly ICommunityRepository _communityRepository;
+    private readonly IdentityGrpcClient _identityGrpcClient;
 
-    public PostsController(IMapper mapper, IPostRepository postRepository)
+    public PostsController(IMapper mapper, IPostRepository postRepository, ICommunityRepository communityRepository, IdentityGrpcClient identityGrpcClient)
     {
         _mapper = mapper;
         _postRepository = postRepository;
-        // _publishEndpoint = publishEndpoint;
+        _communityRepository = communityRepository;
+        _identityGrpcClient = identityGrpcClient;
     }
 
     // GET: api/posts
@@ -35,11 +38,16 @@ public class PostsController : ControllerBase
     [HttpGet("{postId}")]
     public async Task<IActionResult> GetPostById(int postId)
     {
+        // get post
         var post = await _postRepository.GetByIdAsync(postId);
         if (post == null)
         {
             return NotFound();
         }
+
+        // get author
+        // not implemented
+
         var postDto = _mapper.Map<PostDto>(post);
         return Ok(postDto);
     }
@@ -48,29 +56,48 @@ public class PostsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreatePost([FromBody] PostCreateDto postCreateDto)
     {
+        // validate
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
+        // check if author is exists
+        if (!await _identityGrpcClient.AppUserExistsAsync(postCreateDto.AuthorId.ToString()))
+        {
+            return NotFound($"User with ID {postCreateDto.AuthorId} does not exist.");
+        }
+
+        // check if community is exists
+        var communityId = postCreateDto.CommunityId ?? -1;
+        if (communityId != -1)
+        {
+            if (await _communityRepository.GetByIdAsync(communityId) != null)
+            {
+                return NotFound($"Community with ID {communityId} does not exist.");
+            }
+        }
+
+        // perform creating post
         var post = _mapper.Map<Post>(postCreateDto);
 
         await _postRepository.AddAsync(post);
-        await _postRepository.SaveChangesAsync();
 
         var postDto = _mapper.Map<PostDto>(post);
-        return CreatedAtAction(nameof(GetPostById), new { id = post.PostId }, postDto);
+        return CreatedAtAction(nameof(GetPostById), new { postId = post.PostId }, postDto);
     }
 
     // PUT: api/posts/{postId}
     [HttpPut("{postId}")]
     public async Task<IActionResult> UpdatePost(int postId, [FromBody] PostUpdateDto postUpdateDto)
     {
+        // validate post
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
+        // perform update post
         var post = await _postRepository.GetByIdAsync(postId);
         if (post == null)
         {
@@ -80,7 +107,6 @@ public class PostsController : ControllerBase
         _mapper.Map(postUpdateDto, post);
 
         await _postRepository.UpdateAsync(post);
-        await _postRepository.SaveChangesAsync();
 
         return NoContent();
     }
@@ -89,15 +115,15 @@ public class PostsController : ControllerBase
     [HttpDelete("{postId}")]
     public async Task<IActionResult> DeletePost(int postId)
     {
+        // get post
         var post = await _postRepository.GetByIdAsync(postId);
         if (post == null)
         {
             return NotFound();
         }
 
-        // await _postRepository.DeleteAsync(id);
-        await _postRepository.UpdateAsync(post);
-        await _postRepository.SaveChangesAsync();
+        // delete post (set deleted time only, not removing post on database)
+        await _postRepository.DeleteAsync(postId);
 
         return NoContent();
     }

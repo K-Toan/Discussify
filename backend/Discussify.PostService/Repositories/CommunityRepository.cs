@@ -53,12 +53,14 @@ public class CommunityRepository : ICommunityRepository
     {
         community.CreatedAt = DateTime.UtcNow;
         await _context.Communities.AddAsync(community);
+        await SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Community community)
     {
         community.UpdatedAt = DateTime.UtcNow;
         _context.Communities.Update(community);
+        await SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int communityId)
@@ -70,6 +72,7 @@ public class CommunityRepository : ICommunityRepository
             _context.Communities.Update(community);
             // _context.Communities.Remove(community);
         }
+        await SaveChangesAsync();
     }
 
     public async Task SaveChangesAsync()
