@@ -1,7 +1,7 @@
 using Discussify.SubscriptionService.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Discussify.PostService.Data;
+namespace Discussify.SubscriptionService.Data;
 
 public class SubscriptionServiceDbContext : DbContext
 {
