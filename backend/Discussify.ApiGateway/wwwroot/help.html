@@ -1,15 +1,125 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <title>API Gateway</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
-    <h1>API Gateway</h1>
-    <p>
-        <span>Upstream: /authentication/login</span><br />
-        <span>Downstream: https://localhost:7000/api/authentication/login</span><br />
-        <a href="/authentication/login">/authentication/login</a><br />
-    </p>
+    <div class="container">
+        <h1>API Gateway</h1>
+
+        <h2>Authentication</h2>
+        <div class="item">
+            <span>Upstream: /authentication/login</span><br />
+            <span>Downstream: https://localhost:7000/api/authentication/login</span><br />
+        </div>
+        <div class="item">
+            <span>Upstream: /authentication/register</span><br />
+            <span>Downstream: https://localhost:7000/api/authentication/register</span><br />
+        </div>
+
+        <h2>Posts</h2>
+        <div class="item">
+            <span>Upstream: /posts</span><br />
+            <span>Downstream: https://localhost:7001/api/posts</span><br />
+        </div>
+        <div class="item">
+            <span>Upstream: /posts/{postId}</span><br />
+            <span>Downstream: https://localhost:7001/api/posts/{postId}</span><br />
+        </div>
+        <div class="item">
+            <span>Upstream: /posts</span><br />
+            <span>Downstream: https://localhost:7001/api/posts (POST)</span><br />
+            <span>Description: Tạo bài viết mới</span>
+        </div>
+        <div class="item">
+            <span>Upstream: /posts/{postId}</span><br />
+            <span>Downstream: https://localhost:7001/api/posts/{postId} (PUT)</span><br />
+            <span>Description: Cập nhật bài viết</span>
+        </div>
+        <div class="item">
+            <span>Upstream: /posts/{postId}</span><br />
+            <span>Downstream: https://localhost:7001/api/posts/{postId} (DELETE)</span><br />
+            <span>Description: Xóa bài viết</span>
+        </div>
+
+        <h2>Community</h2>
+        <div class="item">
+            <span>Upstream: /community</span><br />
+            <span>Downstream: https://localhost:7001/api/community</span><br />
+        </div>
+        <div class="item">
+            <span>Upstream: /community/{communityId}</span><br />
+            <span>Downstream: https://localhost:7001/api/community/{communityId}</span><br />
+        </div>
+        <div class="item">
+            <span>Upstream: /community</span><br />
+            <span>Downstream: https://localhost:7001/api/community (POST)</span><br />
+            <span>Description: Tạo cộng đồng mới</span>
+        </div>
+        <div class="item">
+            <span>Upstream: /community/{communityId}</span><br />
+            <span>Downstream: https://localhost:7001/api/community/{communityId} (PUT)</span><br />
+            <span>Description: Cập nhật thông tin cộng đồng</span>
+        </div>
+        <div class="item">
+            <span>Upstream: /community/{communityId}</span><br />
+            <span>Downstream: https://localhost:7001/api/community/{communityId} (DELETE)</span><br />
+            <span>Description: Xóa cộng đồng</span>
+        </div>
+
+        <h2>Comments</h2>
+        <div class="item">
+            <span>Upstream: /comments</span><br />
+            <span>Downstream: https://localhost:7002/api/comments</span><br />
+        </div>
+        <div class="item">
+            <span>Upstream: /comments/{commentId}</span><br />
+            <span>Downstream: https://localhost:7002/api/comments/{commentId}</span><br />
+        </div>
+        <div class="item">
+            <span>Upstream: /comments</span><br />
+            <span>Downstream: https://localhost:7002/api/comments (POST)</span><br />
+            <span>Description: Tạo bình luận mới</span>
+        </div>
+        <div class="item">
+            <span>Upstream: /comments/{commentId}</span><br />
+            <span>Downstream: https://localhost:7002/api/comments/{commentId} (PUT)</span><br />
+            <span>Description: Cập nhật bình luận</span>
+        </div>
+        <div class="item">
+            <span>Upstream: /comments/{commentId}</span><br />
+            <span>Downstream: https://localhost:7002/api/comments/{commentId} (DELETE)</span><br />
+            <span>Description: Xóa bình luận</span>
+        </div>
+
+    </div>
 </body>
 </html>

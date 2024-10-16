@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low Level Design & High Level Design</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.2;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .service {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Low Level Design & High Level Design</h1>
+    
+    <div class="service">
+        <h3>Functional Requirements</h3>
+        <h4>1. User Authentication & Management</h4>
+        <p>Register</p>
+        <p>Login</p>
+        <p>Update Profile</p>
+        <h4>2. Content Creation & Interaction</h4>
+        <p>Posting Post (Images/Video uploading coming from future)</p>
+        <p>Commenting on Post/Other Comments</p>
+        <p>Count Vote on Post/Comment</p>
+        <h4>3. Community Features</h4>
+        <p>Create own Community</p>
+        <p>Join/Follow Community</p>
+        <p>Leave Community</p>
+        <h4>4. Content Discovery</h4>
+        <p>Providing Feeds</p>
+        <p>Trending Content (Not implemented)</p>
+        <p>Most voted Contents (Not implemented)</p>
+        <h4>5. Notifications</h4>
+        <p>Send Notifications (Email/In-app)</p>
+    </div>
+
+    <div class="service">
+        <h3>2. ???</h3>
+        <p>???</p>
+    </div>
+
+    
+    <h2>Luồng Dữ Liệu</h2>
+    <p>Sơ đồ luồng dữ liệu giữa các dịch vụ:</p>
+    <ul>
+        <li>API Gateway → Dịch Vụ A</li>
+        <li>Dịch Vụ A → Dịch Vụ B (gRPC)</li>
+        <li>Dịch Vụ B → Dịch Vụ C (MassTransit)</li>
+        <li>Dịch Vụ C → Dịch Vụ B</li>
+        <li>Dịch Vụ B → Dịch Vụ A</li>
+        <li>Dịch Vụ A → API Gateway → Người Dùng</li>
+    </ul>
+
+</div>
+
+</body>
+</html>
