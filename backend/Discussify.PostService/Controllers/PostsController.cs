@@ -44,11 +44,19 @@ public class PostsController : ControllerBase
         {
             return NotFound();
         }
+        var postDto = _mapper.Map<PostDto>(post);
 
         // get author
+        // var author = await _identityGrpcClient.GetAppUserInfoAsync(post.AuthorId);
+        // postDto.AuthorName = author.UserName;
+        // postDto.Email = author.Email;
+
+        // get comments
         // not implemented
 
-        var postDto = _mapper.Map<PostDto>(post);
+        // get community if has
+        // not implemented
+
         return Ok(postDto);
     }
 
@@ -78,10 +86,13 @@ public class PostsController : ControllerBase
             }
         }
 
-        // perform creating post
         var post = _mapper.Map<Post>(postCreateDto);
 
+        // perform creating post
         await _postRepository.AddAsync(post);
+
+        // publish to feed/search service
+        // not implemented
 
         var postDto = _mapper.Map<PostDto>(post);
         return CreatedAtAction(nameof(GetPostById), new { postId = post.PostId }, postDto);
@@ -106,7 +117,11 @@ public class PostsController : ControllerBase
 
         _mapper.Map(postUpdateDto, post);
 
+        // perform updating post
         await _postRepository.UpdateAsync(post);
+
+        // publish to feed/search service
+        // not implemented
 
         return NoContent();
     }
@@ -125,6 +140,9 @@ public class PostsController : ControllerBase
         // delete post (set deleted time only, not removing post on database)
         await _postRepository.DeleteAsync(postId);
 
+        // publish to feed/search service
+        // not implemented
+        
         return NoContent();
     }
 }
