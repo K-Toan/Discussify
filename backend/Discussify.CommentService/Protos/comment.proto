@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package Discussify.Protos;
+
+service CommentService {
+    rpc GetCommentsByPostId (GetCommentsByPostIdRequest) returns (GetCommentsByPostIdResponse);
+}
+
+message Comment {
+    int32 commentId = 1;
+    int32 parentCommentId = 2;
+    int32 postId = 3;
+    int32 userId = 4;
+    string content = 5;
+    int32 upvote = 6;
+    int32 downvote = 7;
+    google.protobuf.Timestamp createdAt = 8;
+}
+
+message GetCommentsByPostIdRequest {
+    int32 postId = 1;
+}
+
+message GetCommentsByPostIdResponse {
+    repeated Comment comments = 1;
+}

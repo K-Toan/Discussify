@@ -24,10 +24,4 @@ public class IdentityGrpcClient
 
         return response != null && !string.IsNullOrEmpty(response.UserId);
     }
-
-    public async Task<GetAppUserByIdResponse> GetAppUserInfoAsync(string userId)
-    {
-        var request = new GetAppUserByIdRequest { UserId = userId };
-        return await _client.GetAppUserByIdAsync(request);
-    }
 }

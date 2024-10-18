@@ -16,13 +16,15 @@ public class PostsController : ControllerBase
     private readonly IPostRepository _postRepository;
     private readonly ICommunityRepository _communityRepository;
     private readonly IdentityGrpcClient _identityGrpcClient;
+    private readonly CommentGrpcClient _commentGrpcClient;
 
-    public PostsController(IMapper mapper, IPostRepository postRepository, ICommunityRepository communityRepository, IdentityGrpcClient identityGrpcClient)
+    public PostsController(IMapper mapper, IPostRepository postRepository, ICommunityRepository communityRepository, IdentityGrpcClient identityGrpcClient, CommentGrpcClient commentGrpcClient)
     {
         _mapper = mapper;
         _postRepository = postRepository;
         _communityRepository = communityRepository;
         _identityGrpcClient = identityGrpcClient;
+        _commentGrpcClient = commentGrpcClient;
     }
 
     // GET: api/posts
@@ -47,11 +49,12 @@ public class PostsController : ControllerBase
         var postDto = _mapper.Map<PostDto>(post);
 
         // get author
-        // var author = await _identityGrpcClient.GetAppUserInfoAsync(post.AuthorId);
-        // postDto.AuthorName = author.UserName;
-        // postDto.Email = author.Email;
+        var author = await _identityGrpcClient.GetAppUserAsync(post.AuthorId);
+        postDto.AuthorName = author.UserName;
 
         // get comments
+        var comments = await _commentGrpcClient.GetCommentsAsync(post.PostId);
+        postDto.Comments = comments;
         // not implemented
 
         // get community if has

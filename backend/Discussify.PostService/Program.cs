@@ -23,12 +23,11 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
 
 // add services
-// gRPC services
+// gRPC clients
 builder.Services.AddScoped<IdentityGrpcClient>();
-builder.Services.AddGrpcClient<IdentityService.IdentityServiceClient>(options =>
-{
-    options.Address = new Uri(config["Services:IdentityService"]);
-});
+builder.Services.AddScoped<CommentGrpcClient>();
+builder.Services.AddGrpcClient<IdentityService.IdentityServiceClient>(options => { options.Address = new Uri(config["Services:IdentityService"]); });
+builder.Services.AddGrpcClient<CommentService.CommentServiceClient>(options => { options.Address = new Uri(config["Services:CommentService"]); });
 
 
 var app = builder.Build();

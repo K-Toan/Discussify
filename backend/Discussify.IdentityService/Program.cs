@@ -53,6 +53,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();

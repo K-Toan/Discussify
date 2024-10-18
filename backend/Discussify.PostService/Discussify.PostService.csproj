@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Protobuf Include="Protos/identity.proto" GrpcServices="Both" />
+    <Protobuf Include="Protos/comment.proto" GrpcServices="Both" />
   </ItemGroup>
   
 </Project>
