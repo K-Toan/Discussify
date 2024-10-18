@@ -17,14 +17,16 @@ public class PostsController : ControllerBase
     private readonly ICommunityRepository _communityRepository;
     private readonly IdentityGrpcClient _identityGrpcClient;
     private readonly CommentGrpcClient _commentGrpcClient;
+    private readonly InteractionGrpcClient _interactionGrpcClient;
 
-    public PostsController(IMapper mapper, IPostRepository postRepository, ICommunityRepository communityRepository, IdentityGrpcClient identityGrpcClient, CommentGrpcClient commentGrpcClient)
+    public PostsController(IMapper mapper, IPostRepository postRepository, ICommunityRepository communityRepository, IdentityGrpcClient identityGrpcClient, CommentGrpcClient commentGrpcClient, InteractionGrpcClient interactionGrpcClient)
     {
         _mapper = mapper;
         _postRepository = postRepository;
         _communityRepository = communityRepository;
         _identityGrpcClient = identityGrpcClient;
         _commentGrpcClient = commentGrpcClient;
+        _interactionGrpcClient = interactionGrpcClient;
     }
 
     // GET: api/posts
@@ -51,6 +53,10 @@ public class PostsController : ControllerBase
         // get author
         var author = await _identityGrpcClient.GetAppUserAsync(post.AuthorId);
         postDto.AuthorName = author.UserName;
+
+        // get interactions
+        var interaction = await _interactionGrpcClient.GetInteractionsAsync(post.PostId);
+        postDto.Interaction = interaction;
 
         // get comments
         var comments = await _commentGrpcClient.GetCommentsAsync(post.PostId);

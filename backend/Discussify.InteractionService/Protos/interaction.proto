@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package Discussify.Protos;
+
+service InteractionService {
+    rpc GetInteractionsByTargetId (GetInteractionsByTargetIdRequest) returns (GetInteractionsByTargetIdResponse);
+}
+
+message GetInteractionsByTargetIdRequest {
+    int32 targetId = 1;
+}
+
+message GetInteractionsByTargetIdResponse {
+    int32 upvote = 1;
+    int32 downvote = 2;
+    int32 comment = 3;
+}

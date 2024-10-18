@@ -23,12 +23,6 @@ public class Post
     [Required]
     public string Content { get; set; }
 
-    [Range(0, int.MaxValue)]
-    public int Upvote { get; set; }
-
-    [Range(0, int.MaxValue)]
-    public int Downvote { get; set; }
-
     [Required]
     public DateTime CreatedAt { get; set; }
 

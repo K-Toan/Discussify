@@ -4,9 +4,9 @@ using Discussify.InteractionService.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-
+builder.Services.AddGrpc();
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<InteractionServiceDbContext>();
 builder.Services.AddScoped<IInteractionRepository, InteractionRepository>();
@@ -15,5 +15,8 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.MapControllers();
+
+// gRPC service
+app.MapGrpcService<InteractionGrpcService>();
 
 app.Run();

@@ -8,11 +8,10 @@ public class PostDto
     public int? CommunityId { get; set; }
     public string Title { get; set; }
     public string Content { get; set; }
-    public int Upvote { get; set; }
-    public int Downvote { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
 
-    public IEnumerable<CommentDto> Comments { get; set; }
+    public InteractionDto Interaction { get; set; }
+    public List<CommentDto> Comments { get; set; }
 }

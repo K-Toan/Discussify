@@ -41,8 +41,16 @@ public class InteractionRepository : IInteractionRepository
             })
             .ToListAsync();
 
-        var interactionCounts = pipeline.ToDictionary(p => p.Type, p => p.Count);
+        var interactionCounts = new Dictionary<InteractionType, int>
+        {
+            { InteractionType.Upvote, 0 },
+            { InteractionType.Downvote, 0 },
+            { InteractionType.Comment, 0 }
+        };
 
+        foreach (var p in pipeline)
+            interactionCounts[p.Type] = p.Count;
+            
         return interactionCounts;
     }
 
