@@ -1,8 +1,9 @@
 using AutoMapper;
-using Discussify.InteractionService.Interfaces;
 using Discussify.InteractionService.Models;
 using Discussify.InteractionService.Models.Dtos;
 using Discussify.InteractionService.Models.Enums;
+using Discussify.InteractionService.Interfaces;
+using Discussify.InteractionService.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Discussify.InteractionService.Controllers;
@@ -13,11 +14,13 @@ public class InteractionsController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly IInteractionRepository _interactionRepository;
+    private readonly VoteHandlerService _voteHandlerService;
 
-    public InteractionsController(IMapper mapper, IInteractionRepository interactionRepository)
+    public InteractionsController(IMapper mapper, IInteractionRepository interactionRepository, VoteHandlerService voteHandlerService)
     {
         _mapper = mapper;
         _interactionRepository = interactionRepository;
+        _voteHandlerService = voteHandlerService;
     }
 
     [HttpGet]
@@ -33,44 +36,11 @@ public class InteractionsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PerformInteraction(UserInteractionCreateDto request)
+    // this api handle vote only, because comment will be handle with message bus
+    public async Task<IActionResult> HandleInteraction(UserInteractionDto userInteractionDto)
     {
-        var userInteraction = _mapper.Map<UserInteraction>(request);
-
-        // user comment on post/other comment
-        if (request.Type == InteractionType.Comment)
-        {
-            await _interactionRepository.AddAsync(userInteraction);
-
-            return Ok(userInteraction);
-        }
-        // interaction is upvote/downvote
-        else
-        {
-            var existingInteraction = await _interactionRepository.GetInteractionByUserAndTargetId(request.UserId, request.TargetId);
-
-            // already existed a interaction before
-            if (existingInteraction != null)
-            {
-                // if type is the same as old interaction
-                if (existingInteraction.Type.Equals(request.Type))
-                {
-                    // remove old interaction
-                    await _interactionRepository.DeleteAsync(existingInteraction.InteractionId);
-                }
-                else
-                {
-                    // update new interaction
-                    existingInteraction.Type = request.Type;
-                    await _interactionRepository.UpdateAsync(existingInteraction);
-                }
-                return Ok(existingInteraction);
-            }
-            else
-            {
-                await _interactionRepository.AddAsync(userInteraction);
-            }
-            return Ok(userInteraction);
-        }
+        await _voteHandlerService.HandleVoteAsync(userInteractionDto);
+        
+        return Ok();
     }
 }

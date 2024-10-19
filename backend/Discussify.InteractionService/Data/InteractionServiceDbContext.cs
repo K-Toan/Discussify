@@ -19,5 +19,7 @@ public class InteractionServiceDbContext
         _database = client.GetDatabase(databaseName);
     }
     
+    public IMongoDatabase Database => _database;
     public IMongoCollection<UserInteraction> UserInteractions => _database.GetCollection<UserInteraction>("UserInteractions");
+    public IMongoCollection<InteractionCount> InteractionCounts => _database.GetCollection<InteractionCount>("InteractionCounts");
 }

@@ -1,12 +1,12 @@
 using Discussify.InteractionService.Models.Enums;
+using MongoDB.Bson;
 
 namespace Discussify.InteractionService.Models.Dtos;
 
 public class UserInteractionDto
 {
-    public int InteractionId { get; set; }
-    public int UserId { get; set; }
+    public string UserId { get; set; }
+    public int PostId { get; set; }
     public int TargetId { get; set; }
     public InteractionType Type { get; set; }
-    public DateTime CreateAt { get; set; }
 }

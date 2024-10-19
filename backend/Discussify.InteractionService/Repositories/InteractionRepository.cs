@@ -71,7 +71,7 @@ public class InteractionRepository : IInteractionRepository
             .Set(i => i.CreatedAt, DateTime.UtcNow);
 
         var result = await _context.UserInteractions.UpdateOneAsync(filter, update);
-        Console.WriteLine(result.ModifiedCount);
+        // Console.WriteLine(result.ModifiedCount);
     }
 
     public async Task DeleteAsync(ObjectId interactionId)
