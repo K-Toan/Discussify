@@ -10,7 +10,7 @@ public class Post
     public int PostId { get; set; }
 
     [Required]
-    public string AuthorId { get; set; }
+    public int AuthorId { get; set; }
 
     [AllowNull]
     [ForeignKey("CommunityId")]

@@ -16,7 +16,7 @@ public class InteractionRepository : IInteractionRepository
         _context = context;
     }
 
-    public async Task<UserInteraction> GetInteractionByUserAndTargetId(string userId, int targetId)
+    public async Task<UserInteraction> GetInteractionByUserAndTargetId(int userId, int targetId)
     {
         var filter = Builders<UserInteraction>.Filter.And(
             Builders<UserInteraction>.Filter.Eq(i => i.UserId, userId),

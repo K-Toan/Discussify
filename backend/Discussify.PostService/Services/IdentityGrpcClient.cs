@@ -12,7 +12,7 @@ public class IdentityGrpcClient
         _client = client;
     }
 
-    public async Task<UserDto> GetAppUserAsync(string userId)
+    public async Task<UserDto> GetAppUserAsync(int userId)
     {
         var request = new GetAppUserByIdRequest { UserId = userId };
         var response = await _client.GetAppUserByIdAsync(request);
@@ -24,11 +24,11 @@ public class IdentityGrpcClient
         };
     }
 
-    public async Task<bool> AppUserExistsAsync(string userId)
+    public async Task<bool> AppUserExistsAsync(int userId)
     {
         var request = new GetAppUserByIdRequest { UserId = userId };
         var response = await _client.GetAppUserByIdAsync(request);
 
-        return response != null && !string.IsNullOrEmpty(response.UserId);
+        return response != null && !string.IsNullOrEmpty(response.UserId.ToString());
     }
 }

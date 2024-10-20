@@ -9,7 +9,7 @@ public class UserInteraction
 {
     [BsonId]
     public ObjectId InteractionId { get; set; }
-    public string UserId { get; set; }
+    public int UserId { get; set; }
     public int PostId { get; set; }
     public int TargetId { get; set; }
     public InteractionType Type { get; set; }

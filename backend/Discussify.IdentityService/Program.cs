@@ -20,7 +20,7 @@ builder.Services.AddDbContext<IdentityServiceDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityServiceDB"));
 });
 
-builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
 {
     options.Password.RequiredLength = 6;
     options.Password.RequireDigit = false;
@@ -66,7 +66,7 @@ app.MapGrpcService<IdentityGrpcService>();
 
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
     await DbInitializer.SeedRolesAsync(roleManager);
 }
 

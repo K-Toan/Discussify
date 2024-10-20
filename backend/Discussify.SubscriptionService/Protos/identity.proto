@@ -7,11 +7,11 @@ service IdentityService {
 }
 
 message GetAppUserByIdRequest {
-    string userId = 1;
+    int32 userId = 1;
 }
 
 message GetAppUserByIdResponse {
-    string userId = 1;
+    int32 userId = 1;
     string userName = 2;
     string email = 3;
 }

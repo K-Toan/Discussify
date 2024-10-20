@@ -12,7 +12,7 @@ message Comment {
     int32 commentId = 1;
     int32 parentCommentId = 2;
     int32 postId = 3;
-    string userId = 4;
+    int32 userId = 4;
     string content = 5;
     int32 upvote = 6;
     int32 downvote = 7;

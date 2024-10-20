@@ -79,7 +79,7 @@ public class PostsController : ControllerBase
         }
 
         // check if author is exists
-        if (!await _identityGrpcClient.AppUserExistsAsync(postCreateDto.AuthorId.ToString()))
+        if (!await _identityGrpcClient.AppUserExistsAsync(postCreateDto.AuthorId))
         {
             return NotFound($"User with ID {postCreateDto.AuthorId} does not exist.");
         }

@@ -20,7 +20,7 @@ public class PostRepository : IPostRepository
         return await _context.Posts.FindAsync(postId);
     }
 
-    public async Task<IEnumerable<Post>> GetByUserIdAsync(string userId)
+    public async Task<IEnumerable<Post>> GetByUserIdAsync(int userId)
     {
         return await _context.Posts.Where(p => p.AuthorId == userId).ToListAsync();
     }

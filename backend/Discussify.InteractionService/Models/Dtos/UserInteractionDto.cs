@@ -5,7 +5,7 @@ namespace Discussify.InteractionService.Models.Dtos;
 
 public class UserInteractionDto
 {
-    public string UserId { get; set; }
+    public int UserId { get; set; }
     public int PostId { get; set; }
     public int TargetId { get; set; }
     public InteractionType Type { get; set; }

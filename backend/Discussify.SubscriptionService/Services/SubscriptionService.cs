@@ -38,7 +38,7 @@ public class SubscriptionService : ISubscriptionService
         return subscriptionDtos;
     }
 
-    public async Task<IEnumerable<SubscriptionDto>> GetByUserIdAsync(string userId)
+    public async Task<IEnumerable<SubscriptionDto>> GetByUserIdAsync(int userId)
     {
         var subscriptions = await _context.Subscriptions.Where(s => s.UserId == userId).ToListAsync();
         if (subscriptions == null)
@@ -61,10 +61,10 @@ public class SubscriptionService : ISubscriptionService
     public async Task<SubscriptionDto> CreateAsync(SubscriptionCreateDto subscriptionCreateDto)
     {
         // check if user exists
-        var userRequest = new GetAppUserByIdRequest { UserId = subscriptionCreateDto.UserId.ToString() };
+        var userRequest = new GetAppUserByIdRequest { UserId = subscriptionCreateDto.UserId };
         var userResponse = await _identityServiceClient.GetAppUserByIdAsync(userRequest);
 
-        if (userResponse == null || string.IsNullOrEmpty(userResponse.UserId))
+        if (userResponse == null || string.IsNullOrEmpty(userResponse.UserId.ToString()))
         {
             throw new InvalidOperationException("User does not exist.");
         }

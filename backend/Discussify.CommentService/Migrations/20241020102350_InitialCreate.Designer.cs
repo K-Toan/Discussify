@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Discussify.CommentService.Migrations
 {
     [DbContext(typeof(CommentServiceDbContext))]
-    [Migration("20241019180429_InitialCreate")]
+    [Migration("20241020102350_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

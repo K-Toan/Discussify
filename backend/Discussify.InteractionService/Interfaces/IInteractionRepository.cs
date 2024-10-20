@@ -6,7 +6,7 @@ namespace Discussify.InteractionService.Interfaces;
 
 public interface IInteractionRepository
 {
-    Task<UserInteraction> GetInteractionByUserAndTargetId(string userId, int targetId);
+    Task<UserInteraction> GetInteractionByUserAndTargetId(int userId, int targetId);
     Task<Dictionary<InteractionType, int>> GetTargetInteractionCounts(int targetId);
     Task AddAsync(UserInteraction interaction);
     Task UpdateAsync(UserInteraction interaction);

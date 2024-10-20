@@ -15,7 +15,7 @@ public class Comment
     public int PostId { get; set; }
 
     [Required]
-    public string UserId { get; set; }
+    public int UserId { get; set; }
 
     // [Required]
     // public int UserInteractionId { get; set; }

@@ -9,7 +9,7 @@ public class Community
     public int CommunityId { get; set; }
 
     [Required]
-    public string AuthorId { get; set; }
+    public int AuthorId { get; set; }
 
     [Required]
     [StringLength(250, ErrorMessage = "Name can't be longer than 250 characters.")] 

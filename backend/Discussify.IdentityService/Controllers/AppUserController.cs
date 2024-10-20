@@ -32,7 +32,7 @@ public class AppUserController : ControllerBase
 
     // GET: api/users/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<AppUserDto>> GetById(string id)
+    public async Task<ActionResult<AppUserDto>> GetById(int id)
     {
         var user = await _appUserRepository.GetByIdAsync(id);
         if (user == null)
@@ -55,7 +55,7 @@ public class AppUserController : ControllerBase
 
     // PUT: api/users/{id}
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(string id, AppUserUpdateDto updateUserDto)
+    public async Task<IActionResult> Update(int id, AppUserUpdateDto updateUserDto)
     {
         var user = await _appUserRepository.GetByIdAsync(id);
         if (user == null)
@@ -69,7 +69,7 @@ public class AppUserController : ControllerBase
 
     // DELETE: api/users/{id}
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete(int id)
     {
         var deleted = await _appUserRepository.DeleteAsync(id);
         if (!deleted)

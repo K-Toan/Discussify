@@ -17,7 +17,7 @@ public class AppUserRepository : IAppUserRepository
         return await _context.AppUsers.ToListAsync();
     }
 
-    public async Task<AppUser> GetByIdAsync(string id)
+    public async Task<AppUser> GetByIdAsync(int id)
     {
         return await _context.AppUsers.FindAsync(id);
     }
@@ -38,7 +38,7 @@ public class AppUserRepository : IAppUserRepository
         return user;
     }
 
-    public async Task<bool> DeleteAsync(string id)
+    public async Task<bool> DeleteAsync(int id)
     {
         var user = await _context.AppUsers.FindAsync(id);
 

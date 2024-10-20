@@ -4,6 +4,6 @@ public class CommentCreateDto
 {
     public int? ParentCommentId { get; set; }
     public int PostId { get; set; }
-    public string UserId { get; set; }
+    public int UserId { get; set; }
     public string Content { get; set; }
 }

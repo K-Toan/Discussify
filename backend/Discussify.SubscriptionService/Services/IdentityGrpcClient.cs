@@ -11,7 +11,7 @@ public class IdentityGrpcClient
         _client = new IdentityService.IdentityServiceClient(channel);
     }
 
-    public async Task<GetAppUserByIdResponse> GetAppUserAsync(string userId)
+    public async Task<GetAppUserByIdResponse> GetAppUserAsync(int userId)
     {
         var request = new GetAppUserByIdRequest { UserId = userId };
         return await _client.GetAppUserByIdAsync(request);

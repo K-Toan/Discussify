@@ -25,7 +25,7 @@ public class CommentRepository : ICommentRepository
         return await _context.Comments.Where(c => c.PostId == postId).ToListAsync();
     }
 
-    public async Task<IEnumerable<Comment>> GetByUserIdAsync(string userId)
+    public async Task<IEnumerable<Comment>> GetByUserIdAsync(int userId)
     {
         return await _context.Comments.Where(c => c.UserId == userId).ToListAsync();
     }

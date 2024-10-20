@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Discussify.SubscriptionService.Migrations
 {
     [DbContext(typeof(SubscriptionServiceDbContext))]
-    [Migration("20241016072029_InitialCreate")]
+    [Migration("20241020103359_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -39,9 +39,8 @@ namespace Discussify.SubscriptionService.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("SubscriptionId");
 
