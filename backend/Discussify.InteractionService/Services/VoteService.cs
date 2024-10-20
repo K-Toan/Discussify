@@ -7,18 +7,18 @@ using MongoDB.Driver;
 
 namespace Discussify.InteractionService.Services;
 
-public class VoteHandlerService
+public class VoteService
 {
     private readonly IMongoCollection<UserInteraction> _userInteractions;
     private readonly IMongoCollection<InteractionCount> _interactionCounts;
 
-    public VoteHandlerService(InteractionServiceDbContext dbContext)
+    public VoteService(InteractionServiceDbContext dbContext)
     {
         _userInteractions = dbContext.UserInteractions;
         _interactionCounts = dbContext.InteractionCounts;
     }
 
-    public async Task HandleVoteAsync(UserInteractionDto userInteractionDto)
+    public async Task PerformVoteAsync(UserInteractionDto userInteractionDto)
     {
         try
         {

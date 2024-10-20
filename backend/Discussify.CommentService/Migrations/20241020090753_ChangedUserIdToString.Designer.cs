@@ -3,6 +3,7 @@ using System;
 using Discussify.CommentService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Discussify.CommentService.Migrations
 {
     [DbContext(typeof(CommentServiceDbContext))]
-    partial class CommentServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241020090753_ChangedUserIdToString")]
+    partial class ChangedUserIdToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

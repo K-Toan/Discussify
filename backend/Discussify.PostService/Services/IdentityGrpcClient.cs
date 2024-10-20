@@ -1,3 +1,4 @@
+using Discussify.PostService.Models.Dtos;
 using Discussify.Protos;
 
 namespace Discussify.PostService.Services;
@@ -11,10 +12,16 @@ public class IdentityGrpcClient
         _client = client;
     }
 
-    public async Task<GetAppUserByIdResponse> GetAppUserAsync(string userId)
+    public async Task<UserDto> GetAppUserAsync(string userId)
     {
         var request = new GetAppUserByIdRequest { UserId = userId };
-        return await _client.GetAppUserByIdAsync(request);
+        var response = await _client.GetAppUserByIdAsync(request);
+        
+        return new UserDto 
+        {
+            UserId = response.UserId,
+            UserName = response.UserName
+        };
     }
 
     public async Task<bool> AppUserExistsAsync(string userId)

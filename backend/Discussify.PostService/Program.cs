@@ -22,8 +22,10 @@ builder.Services.AddDbContext<PostServiceDbContext>(options =>
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ICommunityRepository, CommunityRepository>();
 
-// add services
-// gRPC clients
+// add gRPC services
+// ...
+
+// add gRPC clients
 builder.Services.AddScoped<IdentityGrpcClient>();
 builder.Services.AddScoped<CommentGrpcClient>();
 builder.Services.AddScoped<InteractionGrpcClient>();

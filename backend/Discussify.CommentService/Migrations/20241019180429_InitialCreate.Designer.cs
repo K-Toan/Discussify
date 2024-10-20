@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Discussify.CommentService.Migrations
 {
     [DbContext(typeof(CommentServiceDbContext))]
-    [Migration("20241018095429_InitialCreate")]
+    [Migration("20241019180429_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -43,9 +43,6 @@ namespace Discussify.CommentService.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Downvote")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("ParentCommentId")
                         .HasColumnType("integer");
 
@@ -54,9 +51,6 @@ namespace Discussify.CommentService.Migrations
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Upvote")
-                        .HasColumnType("integer");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");

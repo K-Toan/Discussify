@@ -26,7 +26,7 @@ public class CommentGrpcClient
             Content = c.Content,
             Upvote = c.Upvote,
             Downvote = c.Downvote,
-            CreatedAt = c.CreatedAt.ToDateTime()
+            CreatedAt = c.CreatedAt.ToDateTime(),
         }).ToList();
     }
 }

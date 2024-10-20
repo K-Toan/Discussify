@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Discussify.PostService.Migrations
 {
     [DbContext(typeof(PostServiceDbContext))]
-    [Migration("20241016092938_InitialCreate")]
+    [Migration("20241019175850_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -86,9 +86,6 @@ namespace Discussify.PostService.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Downvote")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -96,9 +93,6 @@ namespace Discussify.PostService.Migrations
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Upvote")
-                        .HasColumnType("integer");
 
                     b.HasKey("PostId");
 

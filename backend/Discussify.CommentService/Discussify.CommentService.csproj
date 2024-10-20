@@ -29,5 +29,6 @@
 
   <ItemGroup>
     <Protobuf Include="Protos/comment.proto" GrpcServices="Both" />
+    <Protobuf Include="Protos/interaction.proto" GrpcServices="Both" />
   </ItemGroup>
 </Project>

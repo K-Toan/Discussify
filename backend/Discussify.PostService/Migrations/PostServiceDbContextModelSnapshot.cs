@@ -83,9 +83,6 @@ namespace Discussify.PostService.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Downvote")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -93,9 +90,6 @@ namespace Discussify.PostService.Migrations
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Upvote")
-                        .HasColumnType("integer");
 
                     b.HasKey("PostId");
 

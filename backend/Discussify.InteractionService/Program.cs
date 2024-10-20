@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<InteractionServiceDbContext>();
-builder.Services.AddScoped<VoteHandlerService>();
+builder.Services.AddScoped<VoteService>();
 builder.Services.AddScoped<IInteractionRepository, InteractionRepository>();
 
 var app = builder.Build();

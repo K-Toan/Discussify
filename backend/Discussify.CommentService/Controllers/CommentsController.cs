@@ -34,7 +34,7 @@ public class CommentsController : ControllerBase
 
     // GET: api/users/{userId}/comments
     [HttpGet("/api/users/{userId}/comments")]
-    public async Task<IActionResult> GetByUserId(int userId)
+    public async Task<IActionResult> GetByUserId(string userId)
     {
         var comments = await _commentRepository.GetByUserIdAsync(userId);
 

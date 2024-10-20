@@ -15,19 +15,13 @@ public class Comment
     public int PostId { get; set; }
 
     [Required]
-    public int UserId { get; set; }
+    public string UserId { get; set; }
 
     // [Required]
     // public int UserInteractionId { get; set; }
 
     [Required]
     public string Content { get; set; }
-
-    [Range(0, int.MaxValue)]
-    public int Upvote { get; set; }
-
-    [Range(0, int.MaxValue)]
-    public int Downvote { get; set; }
 
     [Required]
     public DateTime CreatedAt { get; set; }

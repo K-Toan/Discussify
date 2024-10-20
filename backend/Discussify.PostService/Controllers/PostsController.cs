@@ -15,17 +15,17 @@ public class PostsController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IPostRepository _postRepository;
     private readonly ICommunityRepository _communityRepository;
-    private readonly IdentityGrpcClient _identityGrpcClient;
     private readonly CommentGrpcClient _commentGrpcClient;
+    private readonly IdentityGrpcClient _identityGrpcClient;
     private readonly InteractionGrpcClient _interactionGrpcClient;
 
-    public PostsController(IMapper mapper, IPostRepository postRepository, ICommunityRepository communityRepository, IdentityGrpcClient identityGrpcClient, CommentGrpcClient commentGrpcClient, InteractionGrpcClient interactionGrpcClient)
+    public PostsController(IMapper mapper, IPostRepository postRepository, ICommunityRepository communityRepository, CommentGrpcClient commentGrpcClient, IdentityGrpcClient identityGrpcClient, InteractionGrpcClient interactionGrpcClient)
     {
         _mapper = mapper;
         _postRepository = postRepository;
         _communityRepository = communityRepository;
-        _identityGrpcClient = identityGrpcClient;
         _commentGrpcClient = commentGrpcClient;
+        _identityGrpcClient = identityGrpcClient;
         _interactionGrpcClient = interactionGrpcClient;
     }
 
@@ -35,6 +35,7 @@ public class PostsController : ControllerBase
     {
         var posts = await _postRepository.GetAsync();
         var postDtos = _mapper.Map<IEnumerable<PostDto>>(posts);
+        
         return Ok(postDtos);
     }
 
@@ -45,26 +46,24 @@ public class PostsController : ControllerBase
         // get post
         var post = await _postRepository.GetByIdAsync(postId);
         if (post == null)
-        {
             return NotFound();
-        }
+
         var postDto = _mapper.Map<PostDto>(post);
 
         // get author
-        var author = await _identityGrpcClient.GetAppUserAsync(post.AuthorId);
-        postDto.AuthorName = author.UserName;
+        postDto.Author = await _identityGrpcClient.GetAppUserAsync(post.AuthorId);
 
         // get interactions
-        var interaction = await _interactionGrpcClient.GetInteractionsAsync(post.PostId);
-        postDto.Interaction = interaction;
+        postDto.Interaction = await _interactionGrpcClient.GetInteractionsAsync(post.PostId);
 
         // get comments
-        var comments = await _commentGrpcClient.GetCommentsAsync(post.PostId);
-        postDto.Comments = comments;
-        // not implemented
+        postDto.Comments = await _commentGrpcClient.GetCommentsAsync(post.PostId); // not finished
 
         // get community if has
-        // not implemented
+        if (postDto.CommunityId != null)
+        {
+            // not implemented
+        }
 
         return Ok(postDto);
     }
@@ -151,7 +150,7 @@ public class PostsController : ControllerBase
 
         // publish to feed/search service
         // not implemented
-        
+
         return NoContent();
     }
 }

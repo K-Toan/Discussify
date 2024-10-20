@@ -40,8 +40,6 @@ namespace Discussify.PostService.Migrations
                     CommunityId = table.Column<int>(type: "integer", nullable: true),
                     Title = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     Content = table.Column<string>(type: "text", nullable: false),
-                    Upvote = table.Column<int>(type: "integer", nullable: false),
-                    Downvote = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
