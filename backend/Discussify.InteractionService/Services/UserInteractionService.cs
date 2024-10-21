@@ -42,7 +42,7 @@ public class UserInteractionService
                     // case 1: existing interaction has the same vote type
                     // remove existing interaction (needs interactionId or all ids and its vote type)
                     if(existingInteraction.Type == userInteractionDto.Type)
-                        await RemoveInteractionAsync(existingInteraction.InteractionId);
+                        await RemoveInteractionAsync(existingInteraction.InteractionId, userInteractionDto);
 
                     // case 2: existing interaction has the different vote type
                     // update existing interaction
@@ -79,7 +79,9 @@ public class UserInteractionService
         await _userInteractions.InsertOneAsync(interaction);
 
         // increase interaction count by 1
-        // await UpdateInteractionCountAsync(userInteractionDto, 1);
+        await _interactionCountService.UpdateInteractionCountAsync(userInteractionDto.PostId,
+                                                                   userInteractionDto.CommentId,
+                                                                   userInteractionDto.Type, 1);
     }
 
     private async Task<UserInteraction> GetExistingInteractionAsync(UserInteractionDto userInteractionDto)
@@ -98,11 +100,11 @@ public class UserInteractionService
     private async Task UpdateInteractionAsync(ObjectId interactionId, UserInteractionDto userInteractionDto)
     {
         // remove existing interaction and create new interaction
-        await RemoveInteractionAsync(interactionId);
+        await RemoveInteractionAsync(interactionId, userInteractionDto);
         await CreateNewInteractionAsync(userInteractionDto);
     }
 
-    private async Task RemoveInteractionAsync(ObjectId interactionId)
+    private async Task RemoveInteractionAsync(ObjectId interactionId, UserInteractionDto userInteractionDto)
     {
         // remove user interaction
         var filter = Builders<UserInteraction>.Filter.And(
@@ -112,7 +114,9 @@ public class UserInteractionService
         await _userInteractions.DeleteOneAsync(filter);
 
         // decrease interaction count by 1
-        // ...
+        await _interactionCountService.UpdateInteractionCountAsync(userInteractionDto.PostId,
+                                                                   userInteractionDto.CommentId,
+                                                                   userInteractionDto.Type, -1);
     }
 
 }
