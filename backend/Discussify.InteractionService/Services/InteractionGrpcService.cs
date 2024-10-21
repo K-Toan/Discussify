@@ -13,12 +13,12 @@ public class InteractionGrpcService : InteractionService.InteractionServiceBase
         _context = context;
     }
 
-    public override async Task<GetInteractionsByTargetIdResponse> GetInteractionsByTargetId(GetInteractionsByTargetIdRequest request, ServerCallContext context)
+    public override async Task<GetInteractionsByPostIdResponse> GetInteractionsByPostId(GetInteractionsByPostIdRequest request, ServerCallContext context)
     {
-        var filter = Builders<InteractionCount>.Filter.Eq(i => i.TargetId, request.TargetId);
+        var filter = Builders<InteractionCount>.Filter.Eq(i => i.PostId, request.PostId);
         var interactionCount = await _context.InteractionCounts.Find(filter).FirstOrDefaultAsync();
 
-        return new GetInteractionsByTargetIdResponse
+        return new GetInteractionsByPostIdResponse
         {
             Upvote = interactionCount.Upvote,
             Downvote = interactionCount.Downvote,
@@ -28,13 +28,13 @@ public class InteractionGrpcService : InteractionService.InteractionServiceBase
 
     public override async Task<GetCommentInteractionsByIdsResponse> GetCommentInteractionsByIds(GetCommentInteractionsByIdsRequest request, ServerCallContext context)
     {
-        var filter = Builders<InteractionCount>.Filter.In(i => i.TargetId, request.CommentIds);
+        var filter = Builders<InteractionCount>.Filter.In(i => i.PostId, request.CommentIds);
 
         var interactionCounts = await _context.InteractionCounts.Find(filter).ToListAsync();
 
         var interactionResults = request.CommentIds.Select(commentId =>
         {
-            var interactionCount = interactionCounts.FirstOrDefault(i => i.TargetId == commentId);
+            var interactionCount = interactionCounts.FirstOrDefault(i => i.PostId == commentId);
             return new CommentInteraction
             {
                 CommentId = commentId,

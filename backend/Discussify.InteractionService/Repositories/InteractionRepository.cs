@@ -20,7 +20,7 @@ public class InteractionRepository : IInteractionRepository
     {
         var filter = Builders<UserInteraction>.Filter.And(
             Builders<UserInteraction>.Filter.Eq(i => i.UserId, userId),
-            Builders<UserInteraction>.Filter.Eq(i => i.TargetId, targetId)
+            Builders<UserInteraction>.Filter.Eq(i => i.CommentId, targetId)
         );
 
         var interaction = await _context.UserInteractions.Find(filter).FirstOrDefaultAsync();
@@ -30,7 +30,7 @@ public class InteractionRepository : IInteractionRepository
 
     public async Task<Dictionary<InteractionType, int>> GetTargetInteractionCounts(int targetId)
     {
-        var matchFilter = Builders<UserInteraction>.Filter.Eq(i => i.TargetId, targetId);
+        var matchFilter = Builders<UserInteraction>.Filter.Eq(i => i.CommentId, targetId);
 
         var pipeline = await _context.UserInteractions.Aggregate()
             .Match(matchFilter)

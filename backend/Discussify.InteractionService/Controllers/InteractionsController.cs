@@ -14,13 +14,13 @@ public class InteractionsController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly IInteractionRepository _interactionRepository;
-    private readonly VoteService _voteService;
+    private readonly UserInteractionService _userInteractionService;
 
-    public InteractionsController(IMapper mapper, IInteractionRepository interactionRepository, VoteService voteHandlerService)
+    public InteractionsController(IMapper mapper, IInteractionRepository interactionRepository, UserInteractionService userInteractionService)
     {
         _mapper = mapper;
         _interactionRepository = interactionRepository;
-        _voteService = voteHandlerService;
+        _userInteractionService = userInteractionService;
     }
 
     [HttpGet]
@@ -39,7 +39,7 @@ public class InteractionsController : ControllerBase
     // this api handle upvote/downvote interaction only, comment interaction will be handle with message bus consumer
     public async Task<IActionResult> HandleInteraction(UserInteractionDto userInteractionDto)
     {
-        await _voteService.PerformVoteAsync(userInteractionDto);
+        await _userInteractionService.PerformInteractionAsync(userInteractionDto);
 
         return Ok();
     }

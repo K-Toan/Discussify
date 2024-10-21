@@ -3,16 +3,16 @@ syntax = "proto3";
 package Discussify.Protos;
 
 service InteractionService {
-    rpc GetInteractionsByTargetId (GetInteractionsByTargetIdRequest) returns (GetInteractionsByTargetIdResponse);
+    rpc GetInteractionsByPostId (GetInteractionsByPostIdRequest) returns (GetInteractionsByPostIdResponse);
     rpc GetCommentInteractionsByIds (GetCommentInteractionsByIdsRequest) returns (GetCommentInteractionsByIdsResponse);
 }
 
-// GetInteractionsByTargetId
-message GetInteractionsByTargetIdRequest {
-    int32 targetId = 1;
+// GetInteractionsByPostId
+message GetInteractionsByPostIdRequest {
+    int32 postId = 1;
 }
 
-message GetInteractionsByTargetIdResponse {
+message GetInteractionsByPostIdResponse {
     int32 upvote = 1;
     int32 downvote = 2;
     int32 comment = 3;
