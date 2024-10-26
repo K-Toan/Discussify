@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option csharp_namespace = "InteractionMicroservice.Grpc";
+
+service InteractionService {
+    rpc GetInteractionByPostId (GetInteractionByPostIdRequest) returns (GetInteractionByPostIdResponse);
+    rpc GetInteractionsByCommentIds (GetInteractionsByCommentIdsRequest) returns (GetInteractionsByCommentIdsResponse);
+}
+
+// request model
+message GetInteractionByPostIdRequest {
+    int32 post_id = 1;
+}
+
+message GetInteractionsByCommentIdsRequest {
+    int32 post_id = 1;
+    repeated int32 comment_ids = 2;
+}
+
+// response model
+message PostInteractionCount {
+    int32 post_id = 1;
+    int32 upvote = 2;
+    int32 downvote = 3;
+    int32 comment = 4;
+}
+
+message CommentInteractionCount {
+    int32 post_id = 1;
+    int32 comment_id = 2;
+    int32 upvote = 3;
+    int32 downvote = 4;
+    int32 comment = 5;
+}
+
+message GetInteractionByPostIdResponse {
+    PostInteractionCount interaction_count = 1;
+}
+
+message GetInteractionsByCommentIdsResponse {
+    repeated CommentInteractionCount interaction_counts = 1;
+}

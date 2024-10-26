@@ -1,0 +1,32 @@
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+
+namespace CommentMicroservice.Models;
+
+public class Comment
+{
+    [Key]
+    public int CommentId { get; set; }
+
+    [AllowNull]
+    public int? ParentCommentId { get; set; }
+
+    [Required]
+    public int PostId { get; set; }
+
+    [Required]
+    public int UserId { get; set; }
+
+    [Required]
+    public string Content { get; set; } = string.Empty;
+
+    [Required]
+    public DateTime CreatedAt { get; set; }
+
+    [AllowNull]
+    public DateTime? UpdatedAt { get; set; }
+
+    [AllowNull]
+    public DateTime? DeletedAt { get; set; }
+
+}

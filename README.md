@@ -1,0 +1,1 @@
+dotnet ef migrations add <Name> --output-dir Infrastructure/Migrations
