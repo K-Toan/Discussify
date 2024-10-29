@@ -1,10 +1,10 @@
 using AutoMapper;
-using System.Collections.Generic;
 using CommentMicroservice.Infrastructure.Repositories;
 using CommentMicroservice.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
 using CommentMicroservice.Models;
+using MassTransit;
+using Contracts.MassTransit;
 
 namespace CommentMicroservice.Controllers;
 
@@ -14,11 +14,13 @@ public class CommentsController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly ICommentRepository _commentRepository;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public CommentsController(IMapper mapper, ICommentRepository commentRepository)
+    public CommentsController(IMapper mapper, ICommentRepository commentRepository, IPublishEndpoint publishEndpoint)
     {
         _mapper = mapper;
         _commentRepository = commentRepository;
+        _publishEndpoint = publishEndpoint;
     }
 
     [HttpGet]
@@ -57,17 +59,28 @@ public class CommentsController : ControllerBase
 
         await _commentRepository.AddAsync(comment);
 
+        // publish to message bus
+        try
+        {
+            await _publishEndpoint.Publish(new CommentCreated(comment.UserId, comment.CommentId, comment.PostId));
+            Console.WriteLine($"{comment.CommentId} - {comment.UserId} - {comment.PostId}");
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
         return CreatedAtAction(nameof(GetCommentById), new { commentId = comment.CommentId }, comment);
     }
 
     [HttpPut("{commentId}")]
     public async Task<IActionResult> UpdateComment(int commentId, [FromBody] UpdateCommentDto request)
     {
-        if(commentId != request.CommentId)
+        if (commentId != request.CommentId)
             return BadRequest();
 
         var comment = await _commentRepository.GetByIdAsync(commentId);
-        
+
         if (comment == null)
             return NotFound();
 
@@ -82,10 +95,10 @@ public class CommentsController : ControllerBase
     public async Task<IActionResult> DeleteComment(int commentId)
     {
         var comment = await _commentRepository.GetByIdAsync(commentId);
-        
+
         if (comment == null)
             return NotFound();
-            
+
         comment.DeletedAt = DateTime.UtcNow;
 
         await _commentRepository.UpdateAsync(comment);

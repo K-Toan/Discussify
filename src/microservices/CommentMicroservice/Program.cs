@@ -2,6 +2,9 @@ using CommentMicroservice.Mappings;
 using CommentMicroservice.Infrastructure;
 using CommentMicroservice.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using MassTransit;
+using Polly;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -10,25 +13,43 @@ builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// map
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-
 // dbcontext
 builder.Services.AddDbContext<CommentDbContext>(options =>
 {
     options.UseNpgsql(config.GetConnectionString("CommentMicroserviceDB"));
 });
 
+// masstransit
+builder.Services.AddMassTransit(x =>
+{
+    // x.AddEntityFrameworkOutbox<CommentDbContext>(options =>
+    // {
+    //     options.QueryDelay = TimeSpan.FromSeconds(10);
+    //     options.UsePostgres();
+    //     options.UseBusOutbox();
+    // });
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
+
+// map
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 // repositories
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-
-// services
-// builder.Services.AddScoped<ICommentService, CommentService>();
 
 // ...
 var app = builder.Build();
 
 app.MapControllers();
+app.UseHttpsRedirection();
+
+var retryPolicy = Policy
+    .Handle<NpgsqlException>()
+    .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(10));
 
 // try updating database 
 using (var scope = app.Services.CreateScope())
@@ -37,7 +58,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<CommentDbContext>();
-        context.Database.Migrate();
+        retryPolicy.ExecuteAndCapture(() => context.Database.Migrate());
     }
     catch (Exception ex)
     {
