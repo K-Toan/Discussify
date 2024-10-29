@@ -1,5 +1,6 @@
 using System.Text;
 using IdentityMicroservice.Data;
+using IdentityMicroservice.Infrastructure;
 using IdentityMicroservice.Models;
 using IdentityMicroservice.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,11 +15,14 @@ var config = builder.Configuration;
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddDbContext<IdentityDbContext>(options =>
+
+// dbcontext
+builder.Services.AddDbContext<AppUserDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityMicroserviceDB"));
+    options.UseNpgsql(config.GetConnectionString("IdentityMicroserviceDB"));
 });
 
+// identity config
 builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
 {
     options.Password.RequiredLength = 6;
@@ -27,9 +31,10 @@ builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
     options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
 })
-.AddEntityFrameworkStores<IdentityDbContext>()
+.AddEntityFrameworkStores<AppUserDbContext>()
 .AddDefaultTokenProviders();
 
+// authentication config 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -43,14 +48,17 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = config["Jwt:Issuer"],
+        ValidAudience = config["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]))
     };
 });
 
-builder.Services.AddScoped<IJwtService, JwtService>();
+// repositories
 // builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
+
+// services
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 var app = builder.Build();
 
@@ -61,7 +69,7 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<AppUserDbContext>();
     context.Database.Migrate();
 
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();

@@ -5,11 +5,11 @@ using IdentityMicroservice.Models;
 
 namespace IdentityMicroservice.Infrastructure;
 
-public class IdentityServiceDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
+public class AppUserDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
 {
 
-    public IdentityServiceDbContext() { }
-    public IdentityServiceDbContext(DbContextOptions options) : base(options) { }
+    public AppUserDbContext() { }
+    public AppUserDbContext(DbContextOptions<AppUserDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
