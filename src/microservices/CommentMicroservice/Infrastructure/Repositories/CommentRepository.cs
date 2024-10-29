@@ -18,7 +18,6 @@ public class CommentRepository : ICommentRepository
     public async Task<Comment> AddAsync(Comment entity)
     {
         await _dbSet.AddAsync(entity);
-        await SaveChangesAsync();
         return entity;
     }
 
@@ -56,7 +55,6 @@ public class CommentRepository : ICommentRepository
     public async Task<Comment> UpdateAsync(Comment entity)
     {
         _dbSet.Update(entity);
-        await SaveChangesAsync();
         return entity;
     }
 
@@ -66,12 +64,11 @@ public class CommentRepository : ICommentRepository
         if (entity != null)
         {
             _dbSet.Remove(entity);
-            await SaveChangesAsync();
         }
     }
 
-    public async Task SaveChangesAsync()
+    public async Task<int> SaveChangesAsync()
     {
-        await _context.SaveChangesAsync();
+        return await _context.SaveChangesAsync();
     }
 }

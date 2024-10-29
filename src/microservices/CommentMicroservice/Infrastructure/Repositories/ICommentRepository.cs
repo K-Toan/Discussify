@@ -15,5 +15,5 @@ public interface ICommentRepository
     );
     Task<Comment> UpdateAsync(Comment entity);
     Task DeleteAsync(int id);
-    Task SaveChangesAsync();
+    Task<int> SaveChangesAsync();
 }

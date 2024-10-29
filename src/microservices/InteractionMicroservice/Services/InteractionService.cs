@@ -34,24 +34,18 @@ public class InteractionService(IInteractionRepository interactionRepository, II
                     // remove existing interaction (needs interactionId or all ids and its vote type)
                     if (existingInteraction.Type == interactionDto.Type)
                     {
-                        Console.WriteLine("removing interaction");
-
                         await RemoveInteractionAsync(existingInteraction.InteractionId, interactionDto);
                     }
                     // case 2: existing interaction has the different vote type
                     // update existing interaction
                     else
                     {
-                        Console.WriteLine("updating interaction");
-
                         await UpdateInteractionAsync(existingInteraction.InteractionId, interactionDto);
                     }
                 }
                 // if not
                 else
                 {
-                    Console.WriteLine("interaction is null, creating new interaction");
-
                     // create new
                     await AddInteractionAsync(interactionDto);
                 }

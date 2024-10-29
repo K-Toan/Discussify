@@ -59,15 +59,13 @@ public class CommentsController : ControllerBase
 
         await _commentRepository.AddAsync(comment);
 
-        // publish to message bus
-        try
+        await _publishEndpoint.Publish(new CommentCreated(comment.UserId, comment.CommentId, comment.PostId));
+
+        var result = await _commentRepository.SaveChangesAsync() > 0;
+
+        if(!result)
         {
-            await _publishEndpoint.Publish(new CommentCreated(comment.UserId, comment.CommentId, comment.PostId));
-            Console.WriteLine($"{comment.CommentId} - {comment.UserId} - {comment.PostId}");
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
+            return BadRequest("Could not save changes to DB!");
         }
 
         return CreatedAtAction(nameof(GetCommentById), new { commentId = comment.CommentId }, comment);
@@ -88,6 +86,13 @@ public class CommentsController : ControllerBase
 
         await _commentRepository.UpdateAsync(comment);
 
+        var result = await _commentRepository.SaveChangesAsync() > 0;
+
+        if(!result)
+        {
+            return BadRequest("Could not save changes to DB!");
+        }
+
         return NoContent();
     }
 
@@ -102,6 +107,13 @@ public class CommentsController : ControllerBase
         comment.DeletedAt = DateTime.UtcNow;
 
         await _commentRepository.UpdateAsync(comment);
+
+        var result = await _commentRepository.SaveChangesAsync() > 0;
+
+        if(!result)
+        {
+            return BadRequest("Could not save changes to DB!");
+        }
 
         return NoContent();
     }

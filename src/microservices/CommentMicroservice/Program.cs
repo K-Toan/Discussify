@@ -22,12 +22,13 @@ builder.Services.AddDbContext<CommentDbContext>(options =>
 // masstransit
 builder.Services.AddMassTransit(x =>
 {
-    // x.AddEntityFrameworkOutbox<CommentDbContext>(options =>
-    // {
-    //     options.QueryDelay = TimeSpan.FromSeconds(10);
-    //     options.UsePostgres();
-    //     options.UseBusOutbox();
-    // });
+    x.AddEntityFrameworkOutbox<CommentDbContext>(options =>
+    {
+        options.QueryDelay = TimeSpan.FromSeconds(10);
+        
+        options.UsePostgres();
+        options.UseBusOutbox();
+    });
 
     x.UsingRabbitMq((context, cfg) =>
     {
