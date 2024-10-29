@@ -1,19 +1,25 @@
+# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-EXPOSE 8080
-EXPOSE 8081
 
-# copy .csproj file
+# Copy project files and restore dependencies
 COPY ./*.csproj ./
 RUN dotnet restore
 
-COPY . .
+# Copy all files and build project
+COPY . ./
+RUN dotnet publish -c Release -o /app /p:UseAppHost=false
 
-# build project
-RUN dotnet publish -c Release -o /app
-
-# create final image
+# Stage 2: Final image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-COPY --from=build /app .
+
+# Expose necessary ports
+ENV ASPNETCORE_URLS=http://+:80
+EXPOSE 5000
+
+# Copy build artifacts
+COPY --from=build /app ./
+
+# Start the application
 ENTRYPOINT ["dotnet", "Discussify.IdentityService.dll"]

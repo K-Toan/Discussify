@@ -1,20 +1,24 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 5003 7003
-
+# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# copy .csproj file in order to optimize cache
-COPY ./Discussify.InteractionService/Discussify.InteractionService.csproj ./Discussify.InteractionService/
-RUN dotnet restore ./Discussify.InteractionService/Discussify.InteractionService.csproj
+# Copy project files and restore dependencies
+COPY ./*.csproj ./
+RUN dotnet restore
 
-COPY . .
-WORKDIR /src/Discussify.InteractionService
-RUN dotnet build --no-restore
+# Copy all files and build project
+COPY . ./
+RUN dotnet publish -c Release -o /app /p:UseAppHost=false
 
-FROM base AS final
-WORKDIR /src/Discussify.InteractionService
-COPY --from=build /src/Discussify.InteractionService .
+# Stage 2: Final image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
 
-ENTRYPOINT ["dotnet", "run", "--urls", "http://*:5003;https://*:7003", "--environment", "Development"]
+# Expose necessary ports
+EXPOSE 5003
+
+# Copy build artifacts
+COPY --from=build /app ./
+
+# Start the application
+ENTRYPOINT ["dotnet", "Discussify.InteractionService.dll"]

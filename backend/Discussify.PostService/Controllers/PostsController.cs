@@ -79,10 +79,10 @@ public class PostsController : ControllerBase
         }
 
         // check if author is exists
-        if (!await _identityGrpcClient.AppUserExistsAsync(postCreateDto.AuthorId))
-        {
-            return NotFound($"User with ID {postCreateDto.AuthorId} does not exist.");
-        }
+        // if (!await _identityGrpcClient.AppUserExistsAsync(postCreateDto.AuthorId))
+        // {
+        //     return NotFound($"User with ID {postCreateDto.AuthorId} does not exist.");
+        // }
 
         // check if community is exists
         var communityId = postCreateDto.CommunityId ?? -1;

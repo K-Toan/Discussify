@@ -1,20 +1,24 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 5001 7001
-
+# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# copy .csproj file in order to optimize cache
-COPY ./Discussify.PostService/Discussify.PostService.csproj ./Discussify.PostService/
-RUN dotnet restore ./Discussify.PostService/Discussify.PostService.csproj
+# Copy project files and restore dependencies
+COPY ./*.csproj ./
+RUN dotnet restore
 
-COPY . .
-WORKDIR /src/Discussify.PostService
-RUN dotnet build --no-restore
+# Copy all files and build project
+COPY . ./
+RUN dotnet publish -c Release -o /app /p:UseAppHost=false
 
-FROM base AS final
-WORKDIR /src/Discussify.PostService
-COPY --from=build /src/Discussify.PostService .
+# Stage 2: Final image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
 
-ENTRYPOINT ["dotnet", "run", "--urls", "http://*:5001;https://*:7001", "--environment", "Development"]
+# Expose necessary ports
+EXPOSE 5001
+
+# Copy build artifacts
+COPY --from=build /app ./
+
+# Start the application
+ENTRYPOINT ["dotnet", "Discussify.PostService.dll"]

@@ -5,6 +5,7 @@ using Discussify.IdentityService.Models;
 using Discussify.IdentityService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -53,7 +54,6 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 
-
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -64,8 +64,18 @@ app.MapControllers();
 // gRPC service
 app.MapGrpcService<IdentityGrpcService>();
 
+// kestrel config
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5000, o => o.Protocols = HttpProtocols.Http1AndHttp2);
+});
+
+
 using (var scope = app.Services.CreateScope())
 {
+    var context = scope.ServiceProvider.GetRequiredService<IdentityServiceDbContext>();
+    context.Database.Migrate();
+
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
     await DbInitializer.SeedRolesAsync(roleManager);
 }

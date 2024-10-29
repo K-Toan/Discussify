@@ -1,20 +1,24 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 5002 7002
-
+# Stage 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# copy .csproj file in order to optimize cache
-COPY ./Discussify.CommentService/CommentService.csproj ./Discussify.CommentService/
-RUN dotnet restore ./Discussify.CommentService/CommentService.csproj
+# Copy project files and restore dependencies
+COPY ./*.csproj ./
+RUN dotnet restore
 
-COPY . .
-WORKDIR /src/Discussify.CommentService
-RUN dotnet build --no-restore
+# Copy all files and build project
+COPY . ./
+RUN dotnet publish -c Release -o /app /p:UseAppHost=false
 
-FROM base AS final
-WORKDIR /src/Discussify.CommentService
-COPY --from=build /src/Discussify.CommentService .
+# Stage 2: Final image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
 
-ENTRYPOINT ["dotnet", "run", "--urls", "http://*:5002;https://*:7002", "--environment", "Development"]
+# Expose necessary ports
+EXPOSE 5002
+
+# Copy build artifacts
+COPY --from=build /app ./
+
+# Start the application
+ENTRYPOINT ["dotnet", "Discussify.CommentService.dll"]

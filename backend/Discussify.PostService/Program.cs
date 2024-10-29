@@ -3,6 +3,7 @@ using Discussify.PostService.Interfaces;
 using Discussify.PostService.Repositories;
 using Discussify.PostService.Services;
 using Discussify.Protos;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,8 +34,21 @@ builder.Services.AddGrpcClient<IdentityService.IdentityServiceClient>(options =>
 builder.Services.AddGrpcClient<CommentService.CommentServiceClient>(options => { options.Address = new Uri(config["Services:CommentService"]); });
 builder.Services.AddGrpcClient<InteractionService.InteractionServiceClient>(options => { options.Address = new Uri(config["Services:InteractionService"]); });
 
+// kestrel config
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5001, o => o.Protocols = HttpProtocols.Http1AndHttp2);
+});
+
 
 var app = builder.Build();
+
+// initialize database
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<PostServiceDbContext>();
+    context.Database.Migrate();
+}
 
 // config middleware
 app.UseHttpsRedirection();

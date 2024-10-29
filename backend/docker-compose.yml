@@ -5,7 +5,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgrespw
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - /var/lib/postgresql/data
       
@@ -25,38 +25,21 @@ services:
       - 5672:5672
       - 15672:15672
 
-  # projects
-  # api-gateway:
-  #   image: ${DOCKER_REGISTRY-}api-gateway-service:v1
+  # identity-service:
+  #   image: ${DOCKER_REGISTRY-}identity-service:v1
   #   build:
-  #     context: ./Discussify.ApiGateway
+  #     context: ./Discussify.IdentityService
   #     dockerfile: Dockerfile
   #   ports:
-  #    - "6001:443"
+  #     - "5000:80"
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_HTTP_PORTS=80
-  #     - ASPNETCORE_HTTPS_PORTS=443
+  #     - ASPNETCORE_URLS=http://+:80
+  #     - ConnectionStrings__IdentityServiceDB=Host=postgres;Port=5432;Username=postgres;Password=postgrespw;Database=IdentityServiceDB
   #   volumes:
-  #     - ./Discussify.PostService:/src/Discussify.ApiGateway
-  
-  identity-service:
-    image: ${DOCKER_REGISTRY-}identity-service:v1
-    build:
-      context: ./Discussify.IdentityService
-      dockerfile: Dockerfile
-    ports:
-      - "5000:80"
-      - "7000:443"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=80
-      - ASPNETCORE_HTTPS_PORTS=443
-      - ConnectionStrings__IdentityServiceDB=Host=postgres;Port=5432;Username=postgres;Password=postgrespw;Database=IdentityServiceDB
-    volumes:
-      - ./Discussify.IdentityService:/src/Discussify.IdentityService
-    depends_on:
-      - postgres
+  #     - ./Discussify.IdentityService:/src/Discussify.IdentityService
+  #   depends_on:
+  #     - postgres
 
   # post-service:
   #   image: ${DOCKER_REGISTRY-}post-service:v1
@@ -65,16 +48,15 @@ services:
   #     dockerfile: Dockerfile
   #   ports:
   #     - "5001:80"
-  #     - "7001:443"
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_HTTP_PORTS=80
-  #     - ASPNETCORE_HTTPS_PORTS=443
+  #     - ASPNETCORE_URLS=http://+:80
+  #     - ConnectionStrings__PostServiceDB=Host=postgres;Port=5432;Username=postgres;Password=postgrespw;Database=PostServiceDB
   #   volumes:
   #     - ./Discussify.PostService:/src/Discussify.PostService
   #   depends_on:
   #     - postgres
-
+      
   # comment-service:
   #   image: ${DOCKER_REGISTRY-}comment-service:v1
   #   build:
@@ -82,16 +64,15 @@ services:
   #     dockerfile: Dockerfile
   #   ports:
   #     - "5002:80"
-  #     - "7002:443"
-  #   volumes:
-  #     - ./Discussify.CommentService:/src/Discussify.CommentService
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_HTTP_PORTS=80
-  #     - ASPNETCORE_HTTPS_PORTS=443
+  #     - ASPNETCORE_URLS=http://+:80
+  #     - ConnectionStrings__CommentServiceDB=Host=postgres;Port=5432;Username=postgres;Password=postgrespw;Database=CommentServiceDB
+  #   volumes:
+  #     - ./Discussify.CommentService:/src/Discussify.CommentService
   #   depends_on:
   #     - postgres
-
+            
   # interaction-service:
   #   image: ${DOCKER_REGISTRY-}interaction-service:v1
   #   build:
@@ -99,12 +80,11 @@ services:
   #     dockerfile: Dockerfile
   #   ports:
   #     - "5003:80"
-  #     - "7003:443"
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_HTTP_PORTS=80
-  #     - ASPNETCORE_HTTPS_PORTS=443
+  #     - ASPNETCORE_URLS=http://+:80
+  #     - ConnectionStrings__InteractionServiceDB=Host=postgres;Port=5432;Username=postgres;Password=postgrespw;Database=InteractionServiceDB
   #   volumes:
-  #     - ./Discussify.InteractionService:/src/Discussify.InteractionService
+  #     - ./Discussify.CommentService:/src/Discussify.CommentService
   #   depends_on:
-  #     - mongodb
+  #     - postgres
