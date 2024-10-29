@@ -6,7 +6,7 @@ namespace PostMicroservice.Infrastructure.Repositories;
 public interface IPostRepository
 {
     Task<Post> AddAsync(Post entity);
-    Task<Post> GetByIdAsync(int id);
+    Task<Post?> GetByIdAsync(int id);
     Task<IEnumerable<Post>> GetAsync
     (
         Expression<Func<Post, bool>>? filter = null,

@@ -22,9 +22,9 @@ public class PostRepository : IPostRepository
         return entity;
     }
 
-    public async Task<Post?> GetByIdAsync(int id)
+    public async Task<Post?> GetByIdAsync(int postId)
     {
-        return await _dbSet.FindAsync(id);
+        return await _dbSet.FirstOrDefaultAsync(p => p.PostId == postId);
     }
 
     public async Task<IEnumerable<Post>> GetAsync(
