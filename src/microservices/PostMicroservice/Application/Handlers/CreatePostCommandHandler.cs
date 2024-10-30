@@ -1,27 +1,26 @@
 using MediatR;
 using AutoMapper;
-using PostMicroservice.Infrastructure.Repositories;
+using MassTransit;
+using Contracts.MassTransit;
+using PostMicroservice.Models;
 using PostMicroservice.Application.Commands;
 using PostMicroservice.Application.Queries;
-using PostMicroservice.Models;
+using PostMicroservice.Infrastructure.Repositories;
 
 
 namespace PostMicroservice.Application.Hanlders;
 
-public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, Post>
+public class CreatePostCommandHandler(IMapper mapper, IPostRepository postRepository, IPublishEndpoint publishEndpoint) : IRequestHandler<CreatePostCommand, Post>
 {
-    private readonly IMapper _mapper;
-    private readonly IPostRepository _postRepository;
-
-    public CreatePostCommandHandler(IMapper mapper, IPostRepository postRepository)
-    {
-        _mapper = mapper;
-        _postRepository = postRepository;
-    }
-
     public async Task<Post> Handle(CreatePostCommand request, CancellationToken cancellationToken)
     {
-        var post = _mapper.Map<Post>(request);
-        return await _postRepository.AddAsync(post);
+        var post = await postRepository.AddAsync(mapper.Map<Post>(request));
+
+        // publish
+        await publishEndpoint.Publish(new PostCreated(post.PostId, post.AuthorId, post.AuthorName, post.CommunityId, post.CommunityName, post.Title, post.CreatedAt));
+        
+        await postRepository.SaveChangesAsync();
+        
+        return post;
     }
 }

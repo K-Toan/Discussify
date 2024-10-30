@@ -1,3 +1,6 @@
+using Contracts.MassTransit;
+using MassTransit;
+using MassTransit.Transports;
 using MediatR;
 using PostMicroservice.Application.Commands;
 using PostMicroservice.Application.Queries;
@@ -6,21 +9,12 @@ using PostMicroservice.Models.Dtos;
 
 namespace PostMicroservice.Application.Services;
 
-public class PostService : IPostService
+public class PostService(IMediator mediator, InteractionGrpcClient interactionGrpcClient) : IPostService
 {
-    private readonly IMediator _mediator;
-    private readonly InteractionGrpcClient _interactionGrpcClient;
-
-    public PostService(IMediator mediator, InteractionGrpcClient interactionGrpcClient)
-    {
-        _mediator = mediator;
-        _interactionGrpcClient = interactionGrpcClient;
-    }
-
     public async Task<IEnumerable<PostDto>> GetPostsAsync(int pageIndex = 1, int pageSize = 100, string orderBy = "newest")
     {
-        var posts = await _mediator.Send(new GetPostsQuery { PageIndex = pageIndex, PageSize = pageSize, OrderBy = orderBy });
-        
+        var posts = await mediator.Send(new GetPostsQuery { PageIndex = pageIndex, PageSize = pageSize, OrderBy = orderBy });
+
         var postDtos = posts.Select(p => new PostDto
         {
             Title = p.Title,
@@ -33,16 +27,16 @@ public class PostService : IPostService
     public async Task<PostDto?> GetPostByIdAsync(int postId)
     {
         // get post details
-        var post = await _mediator.Send(new GetPostByIdQuery { PostId = postId });
+        var post = await mediator.Send(new GetPostByIdQuery { PostId = postId });
 
         // get author
         // ...
 
         // get interactions
-        var interactionCount = await _interactionGrpcClient.GetInteractionByPostIdAsync(postId);
+        var interactionCount = await interactionGrpcClient.GetInteractionByPostIdAsync(postId);
 
         // get comments
-        // var comments = await _commentServiceClient.GetCommentsByPostIdAsync(postId);
+        // var comments = await commentServiceClient.GetCommentsByPostIdAsync(postId);
 
         var postDto = new PostDto
         {
@@ -80,7 +74,7 @@ public class PostService : IPostService
             CreatedAt = DateTime.UtcNow
         };
 
-        return await _mediator.Send(command);
+        return await mediator.Send(command);
     }
 
     public async Task UpdatePostAsync(UpdatePostDto updatePostDto)
@@ -93,7 +87,7 @@ public class PostService : IPostService
             UpdatedAt = DateTime.UtcNow
         };
 
-        await _mediator.Send(command);
+        await mediator.Send(command);
     }
 
     public async Task DeletePostAsync(int postId)
@@ -104,7 +98,7 @@ public class PostService : IPostService
             DeletedAt = DateTime.UtcNow
         };
 
-        await _mediator.Send(command);
+        await mediator.Send(command);
     }
 
 }

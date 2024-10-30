@@ -1,10 +1,10 @@
+using Polly;
+using Npgsql;
+using MassTransit;
 using CommentMicroservice.Mappings;
 using CommentMicroservice.Infrastructure;
 using CommentMicroservice.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using MassTransit;
-using Polly;
-using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -12,6 +12,9 @@ var config = builder.Configuration;
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// map
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // dbcontext
 builder.Services.AddDbContext<CommentDbContext>(options =>
@@ -36,8 +39,6 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
-// map
-builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // repositories
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();

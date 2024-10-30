@@ -1,10 +1,13 @@
-using System.Reflection;
+using Polly;
+using Npgsql;
+using MassTransit;
 using Grpc.Net.Client;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using PostMicroservice.Mappings;
 using PostMicroservice.Application.Services;
 using PostMicroservice.Infrastructure;
 using PostMicroservice.Infrastructure.Repositories;
-using PostMicroservice.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -25,6 +28,23 @@ builder.Services.AddDbContext<PostDbContext>(options =>
     options.UseNpgsql(config.GetConnectionString("PostMicroserviceDB"));
 });
 
+// masstransit
+builder.Services.AddMassTransit(x =>
+{
+    x.AddEntityFrameworkOutbox<PostDbContext>(options =>
+    {
+        options.QueryDelay = TimeSpan.FromSeconds(10);
+        
+        options.UsePostgres();
+        options.UseBusOutbox();
+    });
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
+
 // repositories
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 
@@ -41,6 +61,10 @@ var app = builder.Build();
 
 app.MapControllers();
 
+var retryPolicy = Policy
+    .Handle<NpgsqlException>()
+    .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(10));
+
 // try updating database 
 using (var scope = app.Services.CreateScope())
 {
@@ -49,7 +73,7 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<PostDbContext>();
         context.Database.Migrate();
-        DbInitializer.InitDb(app);
+       retryPolicy.ExecuteAndCapture(() => DbInitializer.InitDb(app));
     }
     catch (Exception ex)
     {

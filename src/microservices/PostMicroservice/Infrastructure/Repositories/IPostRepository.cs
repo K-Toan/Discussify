@@ -15,5 +15,5 @@ public interface IPostRepository
     );
     Task<Post> UpdateAsync(Post entity);
     Task DeleteAsync(int id);
-    Task SaveChangesAsync();
+    Task<int> SaveChangesAsync();
 }

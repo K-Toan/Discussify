@@ -28,7 +28,6 @@ public static class DbInitializer
         {
             new Post
             {
-                PostId = 1,
                 AuthorId = 1,
                 AuthorName = "Alice",
                 CommunityId = 1,
@@ -39,7 +38,6 @@ public static class DbInitializer
             },
             new Post
             {
-                PostId = 2,
                 AuthorId = 2,
                 AuthorName = "Bob",
                 CommunityId = 2,
@@ -50,7 +48,6 @@ public static class DbInitializer
             },
             new Post
             {
-                PostId = 3,
                 AuthorId = 3,
                 AuthorName = "Charlie",
                 Title = "My Coding Journey",
@@ -59,7 +56,6 @@ public static class DbInitializer
             },
             new Post
             {
-                PostId = 4,
                 AuthorId = 4,
                 AuthorName = "Diana",
                 CommunityId = 3,
@@ -70,7 +66,6 @@ public static class DbInitializer
             },
             new Post
             {
-                PostId = 5,
                 AuthorId = 5,
                 AuthorName = "Eve",
                 CommunityId = 4,
@@ -81,7 +76,6 @@ public static class DbInitializer
             },
             new Post
             {
-                PostId = 6,
                 AuthorId = 6,
                 AuthorName = "Frank",
                 Title = "AI Trends in 2024",
@@ -90,7 +84,6 @@ public static class DbInitializer
             },
             new Post
             {
-                PostId = 7,
                 AuthorId = 7,
                 AuthorName = "Grace",
                 CommunityId = 5,
@@ -101,7 +94,6 @@ public static class DbInitializer
             },
             new Post
             {
-                PostId = 8,
                 AuthorId = 8,
                 AuthorName = "Hank",
                 Title = "Travel Diaries",
@@ -110,7 +102,6 @@ public static class DbInitializer
             },
             new Post
             {
-                PostId = 9,
                 AuthorId = 9,
                 AuthorName = "Ivy",
                 CommunityId = 6,
@@ -121,7 +112,6 @@ public static class DbInitializer
             },
             new Post
             {
-                PostId = 10,
                 AuthorId = 0,
                 AuthorName = "Jack",
                 CommunityId = 7,
