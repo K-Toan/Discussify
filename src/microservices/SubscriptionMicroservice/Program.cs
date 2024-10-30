@@ -1,10 +1,21 @@
+using SubscriptionMicroservice.Endpoints;
+using SubscriptionMicroservice.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// dbcontext
+builder.Services.AddSingleton<SubscriptionDbContext>();
+
+//
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+
+// minimal apis
+app.MapCommunityEndpoints();
+app.MapSubscriptionEndpoints();
 
 app.Run();

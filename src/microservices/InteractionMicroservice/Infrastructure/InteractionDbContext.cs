@@ -12,7 +12,7 @@ public class InteractionDbContext
     {
         _configuration = configuration;
 
-        string connectionUri = _configuration.GetConnectionString("InteractionServiceDB");
+        string connectionUri = _configuration.GetConnectionString("InteractionMicroserviceDB");
         string databaseName = _configuration["DatabaseName"];
 
         var client = new MongoClient(connectionUri);
