@@ -23,7 +23,8 @@ public class DeletePostCommandHandler(IPostRepository postRepository) : IRequest
         await postRepository.UpdateAsync(post);
         
         // publish to message bus 
-        
+        //await publishEndpoint.Publish(new PostDeleted(post.PostId));
+
         if (await postRepository.SaveChangesAsync() <= 0)
         {
             throw new Exception("Failed to save changes when deleting post.");

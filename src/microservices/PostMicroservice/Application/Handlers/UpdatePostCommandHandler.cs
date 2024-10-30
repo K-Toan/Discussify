@@ -18,12 +18,12 @@ public class UpdatePostCommandHandler(IMapper mapper, IPostRepository postReposi
         mapper.Map(request, existingPost);
         await postRepository.UpdateAsync(existingPost);
 
+        // publish to message bus 
+        //await publishEndpoint.Publish(new PostUpdated(post.PostId));
+
         if (await postRepository.SaveChangesAsync() <= 0)
         {
             throw new Exception("Failed to save changes when updating post.");
         }
-
-        // publish to message bus 
-
     }
 }
