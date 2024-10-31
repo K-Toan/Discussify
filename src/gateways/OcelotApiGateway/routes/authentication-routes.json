@@ -1,0 +1,32 @@
+{
+    "Routes": [
+        {
+            "DownstreamPathTemplate": "/api/authentication/login",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5000
+                }
+            ],
+            "UpstreamPathTemplate": "/api/authentication/login",
+            "UpstreamHttpMethod": [
+                "POST"
+            ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/authentication/register",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5000
+                }
+            ],
+            "UpstreamPathTemplate": "/api/authentication/register",
+            "UpstreamHttpMethod": [
+                "POST"
+            ]
+        }
+    ]
+}
