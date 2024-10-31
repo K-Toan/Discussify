@@ -24,7 +24,6 @@ public class InteractionService(IInteractionRepository interactionRepository, II
                 // check if user is already voted
                 var existingInteraction = await interactionRepository.GetInteractionAsync(null, interactionDto.UserId, interactionDto.PostId, interactionDto.CommentId);
 
-
                 // if user voted
                 if (existingInteraction != null)
                 {
@@ -49,7 +48,6 @@ public class InteractionService(IInteractionRepository interactionRepository, II
                     // create new
                     await AddInteractionAsync(interactionDto);
                 }
-
             }
         }
         catch (Exception ex)
