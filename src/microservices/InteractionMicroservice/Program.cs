@@ -28,6 +28,14 @@ builder.Services.AddMassTransit(x =>
 
     x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("interaction", false));
 
+    // x.AddMongoDbOutbox<InteractionDbContext>(options =>
+    // {
+    //     options.QueryDelay = TimeSpan.FromSeconds(10);
+        
+    //     options.UsePostgres();
+    //     options.UseBusOutbox();
+    // });
+
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.ConfigureEndpoints(context);

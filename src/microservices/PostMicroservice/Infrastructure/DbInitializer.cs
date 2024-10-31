@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using PostMicroservice.Models;
 
 namespace PostMicroservice.Infrastructure;
