@@ -29,14 +29,8 @@ public class PostService(IMediator mediator, InteractionGrpcClient interactionGr
         // get post details
         var post = await mediator.Send(new GetPostByIdQuery { PostId = postId });
 
-        // get author
-        // ...
-
         // get interactions
         var interactionCount = await interactionGrpcClient.GetInteractionByPostIdAsync(postId);
-
-        // get comments
-        // var comments = await commentServiceClient.GetCommentsByPostIdAsync(postId);
 
         var postDto = new PostDto
         {

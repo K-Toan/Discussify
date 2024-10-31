@@ -12,6 +12,15 @@ public class PostService : IPostService
     {
         _posts = dbContext.Posts;
     }
+
+    public async Task<Post> GetPostById(int postId)
+    {
+        var filter = Builders<Post>.Filter.Eq(p => p.PostId, postId);
+        var post = await _posts.Find(filter).FirstOrDefaultAsync();
+        
+        return post ?? throw new KeyNotFoundException($"Post with ID {postId} not found.");
+    }
+
     public async Task<IEnumerable<Post>> GetPostsAsync(int pageIndex, int pageSize, string orderBy)
     {
         var sortDefinition = orderBy.ToLower() switch
