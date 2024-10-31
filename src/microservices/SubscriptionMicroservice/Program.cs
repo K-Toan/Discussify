@@ -1,12 +1,17 @@
+using Microsoft.EntityFrameworkCore;
 using SubscriptionMicroservice.Endpoints;
 using SubscriptionMicroservice.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 builder.Services.AddEndpointsApiExplorer();
 
 // dbcontext
-builder.Services.AddSingleton<SubscriptionDbContext>();
+builder.Services.AddDbContext<SubscriptionDbContext>(options =>
+{
+    options.UseNpgsql(config.GetConnectionString("SubscriptionMicroserviceDB"));
+});
 
 //
 
@@ -18,4 +23,18 @@ app.UseHttpsRedirection();
 app.MapCommunityEndpoints();
 app.MapSubscriptionEndpoints();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<SubscriptionDbContext>();
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
 app.Run();

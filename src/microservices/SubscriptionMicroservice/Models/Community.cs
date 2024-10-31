@@ -1,12 +1,14 @@
 using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson.Serialization.Attributes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SubscriptionMicroservice.Models;
 
 public class Community
 {
-    [BsonId]
+    [Key]
     public int CommunityId { get; set; }
+    
+    [Required]
     public int AuthorId { get; set; }
 
     [Required]
@@ -16,8 +18,14 @@ public class Community
     [Required]
     [StringLength(750, ErrorMessage = "Description can't be longer than 750 characters.")] 
     public string Description { get; set; }
-    public DateTime CreatedAt { get; set; }
+
+    [Required]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    
+    [AllowNull]
     public DateTime? UpdatedAt { get; set; }
+    
+    [AllowNull]
     public DateTime? DeletedAt { get; set; }
     
 }

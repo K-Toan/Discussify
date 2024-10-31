@@ -1,18 +1,17 @@
-using MongoDB.Driver;
+using Microsoft.EntityFrameworkCore;
 using SubscriptionMicroservice.Models;
 
 namespace SubscriptionMicroservice.Infrastructure;
 
-public class SubscriptionDbContext
+public class SubscriptionDbContext : DbContext
 {
-    private readonly IMongoDatabase _database;
+    public SubscriptionDbContext(DbContextOptions<SubscriptionDbContext> options) : base(options) { }
 
-    public SubscriptionDbContext(IConfiguration configuration)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var client = new MongoClient(configuration.GetConnectionString("SubscriptionMicroserviceDB"));
-        _database = client.GetDatabase(configuration["DatabaseName"]);
+        base.OnModelCreating(modelBuilder);
     }
 
-    public IMongoCollection<Community> Communities => _database.GetCollection<Community>("Communities");
-    public IMongoCollection<Subscription> Subscriptions => _database.GetCollection<Subscription>("Subscriptions");
+    public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<Community> Communities { get; set; }
 }
