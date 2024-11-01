@@ -18,6 +18,7 @@ public class PostCreatedConsumer(IPostService postService) : IConsumer<PostCreat
             CommunityId = context.Message.CommunityId,
             CommunityName = context.Message.CommunityName,
             Title = context.Message.Title,
+            Content = context.Message.Content,
             CreatedAt = context.Message.CreatedAt
         };
 

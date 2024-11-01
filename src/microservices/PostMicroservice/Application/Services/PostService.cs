@@ -17,8 +17,19 @@ public class PostService(IMediator mediator, InteractionGrpcClient interactionGr
 
         var postDtos = posts.Select(p => new PostDto
         {
+            PostId = p.PostId,
             Title = p.Title,
             Content = p.Content,
+
+            CommunityId = p.CommunityId,
+            CommunityName = p.CommunityName,
+
+            AuthorId = p.AuthorId,
+            AuthorName = p.AuthorName,
+
+            CreatedAt = p.CreatedAt,
+            UpdatedAt = p.UpdatedAt,
+            DeletedAt = p.DeletedAt,
         }).ToList();
 
         return postDtos;
@@ -41,8 +52,8 @@ public class PostService(IMediator mediator, InteractionGrpcClient interactionGr
             CommunityId = post.CommunityId,
             CommunityName = post.CommunityName,
 
-            UserId = post.AuthorId,
-            UserName = post.AuthorName,
+            AuthorId = post.AuthorId,
+            AuthorName = post.AuthorName,
 
             Upvote = interactionCount.Upvote,
             Downvote = interactionCount.Downvote,

@@ -26,7 +26,7 @@ public class UpdatePostCommandHandler(IMapper mapper, PostDbContext context, IPo
                 await postRepository.UpdateAsync(existingPost);
 
                 // publish to outbox  
-                await publishEndpoint.Publish(new PostUpdated(request.PostId, request.Title, request.UpdatedAt));
+                await publishEndpoint.Publish(new PostUpdated(request.PostId, request.Title, request.Title, request.UpdatedAt));
 
                 // save changes
                 await postRepository.SaveChangesAsync();

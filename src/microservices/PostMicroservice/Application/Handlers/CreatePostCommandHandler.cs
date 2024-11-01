@@ -22,7 +22,7 @@ public class CreatePostCommandHandler(IMapper mapper, PostDbContext context, IPo
                 await postRepository.SaveChangesAsync();
 
                 // publish to outbox
-                await publishEndpoint.Publish(new PostCreated(post.PostId, post.AuthorId, post.AuthorName, post.CommunityId, post.CommunityName, post.Title, post.CreatedAt));
+                await publishEndpoint.Publish(new PostCreated(post.PostId, post.AuthorId, post.AuthorName, post.CommunityId, post.CommunityName, post.Title, post.Content, post.CreatedAt));
                 await postRepository.SaveChangesAsync();
 
                 transaction.Commit();

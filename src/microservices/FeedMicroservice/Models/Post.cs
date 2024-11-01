@@ -8,6 +8,7 @@ public class Post
     public int? CommunityId { get; set; }
     public string CommunityName { get; set; }
     public string Title { get; set; } 
+    public string Content { get; set; } 
     public int Upvote { get; set; } = 0;
     public int Downvote { get; set; } = 0;
     public int Comment { get; set; } = 0;

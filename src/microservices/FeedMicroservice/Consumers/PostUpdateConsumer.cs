@@ -13,6 +13,7 @@ public class PostUpdatedConsumer(IPostService postService) : IConsumer<PostUpdat
         var post = await postService.GetPostById(context.Message.PostId);
 
         post.Title = context.Message.Title;
+        post.Content = context.Message.Content;
         post.UpdatedAt = context.Message.UpdatedAt;
 
         await postService.UpdatePostAsync(post);
