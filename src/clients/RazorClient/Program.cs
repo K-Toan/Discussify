@@ -1,8 +1,29 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Authentication.Cookies;
+using RazorClient.Services;
 
-builder.Services.AddRazorPages();
+var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
 builder.Services.AddHttpClient();
+builder.Services.AddRazorPages();
+
+// auth
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddCookie(cookieOptions =>
+{
+    cookieOptions.LoginPath = "/Authentication/Login";
+    cookieOptions.LogoutPath = "/Authentication/Logout";
+    //cookieOptions.AccessDeniedPath = "/Authentication/AccessDenied";
+});
+
+// services
+builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<CommentService>();
+builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
 
@@ -12,13 +33,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
+
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 

@@ -1,32 +1,36 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorClient.Models;
+using RazorClient.Services;
 
 namespace RazorClient.Pages;
 
-public class PostDetailsModel : PageModel
+public class DetailsModel : PageModel
 {
-    public PostDto PostDto { get; set; } = new PostDto(
-            PostId: 1,
-            AuthorId: 101,
-            AuthorName: "Alice",
-            CommunityId: 201,
-            CommunityName: "Technology",
-            Title: "Exploring New AI Techniques",
-            Content: "Today, I'm diving into the latest advancements in artificial intelligence...",
-            Upvote: 150,
-            Downvote: 5,
-            Comment: 20,
-            CreatedAt: new DateTime(2023, 10, 1, 8, 0, 0),
-            UpdatedAt: new DateTime(2023, 10, 5, 9, 0, 0)
-    );
+    private readonly PostService _postService;
+    private readonly CommentService _commentService;
+    public PostDto PostDto { get; set; }
+    public List<CommentDto> CommentDtos { get; set; }
 
-    public PostDetailsModel()
+    public DetailsModel(PostService postService, CommentService commentService)
     {
-        
+        _postService = postService;
+        _commentService = commentService;
     }
 
-    public void OnGet()
+    public async Task<IActionResult> OnGetAsync(int id)
     {
+        // get post
+        PostDto = await _postService.GetPostByIdAsync(id);
+
+        if (PostDto == null)
+        {
+            return NotFound();
+        }
+
+        // get comments
+        CommentDtos = await _commentService.GetPostCommentsByPostId(id);
+
+        return Page();
     }
 }
