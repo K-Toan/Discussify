@@ -1,22 +1,58 @@
+﻿/* HTML */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #1a1a1b;
+    color: #d7dadc;
+    margin-bottom: 60px;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #1a1a1b;
+}
+
+.navbar-brand, .nav-link {
+    color: #d7dadc !important;
+}
+
+.nav-link:hover {
+    color: #ffffff !important;
+}
+
+.form-control {
+    background-color: #333;
+    color: #d7dadc;
+    border: 1px solid #444;
+}
+
+.form-control::placeholder {
+    color: #a8a8a8;
+}
+
+/* Button */
+.btn-outline-light {
+    color: #d7dadc;
+    border-color: #d7dadc;
+}
+
+.btn-outline-light:hover {
+    color: #ffffff;
+    background-color: #d7dadc;
+}
+
+/* Icon Profile */
+.nav-item i {
+    font-size: 1.25rem;
+    color: #d7dadc;
 }

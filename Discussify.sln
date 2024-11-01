@@ -7,37 +7,34 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{94449C0B-924
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "microservices", "microservices", "{EBA4980B-4DE9-4A30-8E84-C9BC698C0784}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostMicroservice", "src\microservices\PostMicroservice\PostMicroservice.csproj", "{E8279621-7E7D-4A73-BF29-1A2EF85DFC5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostMicroservice", "src\microservices\PostMicroservice\PostMicroservice.csproj", "{E8279621-7E7D-4A73-BF29-1A2EF85DFC5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommentMicroservice", "src\microservices\CommentMicroservice\CommentMicroservice.csproj", "{B53323AE-99B0-45DE-94F1-B94628664C5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommentMicroservice", "src\microservices\CommentMicroservice\CommentMicroservice.csproj", "{B53323AE-99B0-45DE-94F1-B94628664C5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractionMicroservice", "src\microservices\InteractionMicroservice\InteractionMicroservice.csproj", "{28BAE6C6-1631-4EB9-AE7F-19E5EFF4E055}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InteractionMicroservice", "src\microservices\InteractionMicroservice\InteractionMicroservice.csproj", "{28BAE6C6-1631-4EB9-AE7F-19E5EFF4E055}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{6F854ABE-2A74-45AE-9F65-68F9F15A67DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "src\shared\Contracts\Contracts.csproj", "{8C2B7D79-1304-4BB9-AD03-A5F8F2D1D3CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "src\shared\Contracts\Contracts.csproj", "{8C2B7D79-1304-4BB9-AD03-A5F8F2D1D3CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityMicroservice", "src\microservices\IdentityMicroservice\IdentityMicroservice.csproj", "{0C160B97-65BA-45A7-A9B1-E676E9624086}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityMicroservice", "src\microservices\IdentityMicroservice\IdentityMicroservice.csproj", "{0C160B97-65BA-45A7-A9B1-E676E9624086}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedMicroservice", "src\microservices\FeedMicroservice\FeedMicroservice.csproj", "{A8387360-3085-4A8B-A632-AB0C04EAC979}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FeedMicroservice", "src\microservices\FeedMicroservice\FeedMicroservice.csproj", "{A8387360-3085-4A8B-A632-AB0C04EAC979}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionMicroservice", "src\microservices\SubscriptionMicroservice\SubscriptionMicroservice.csproj", "{B378BF95-E603-405B-9AA8-729D2E8F92FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubscriptionMicroservice", "src\microservices\SubscriptionMicroservice\SubscriptionMicroservice.csproj", "{B378BF95-E603-405B-9AA8-729D2E8F92FF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gateways", "gateways", "{ACE9874C-67E3-44C1-8FC3-C28CBB40CBDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcelotApiGateway", "src\gateways\OcelotApiGateway\OcelotApiGateway.csproj", "{B6570E16-88C8-4170-88D1-0D0CF8986267}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcelotApiGateway", "src\gateways\OcelotApiGateway\OcelotApiGateway.csproj", "{B6570E16-88C8-4170-88D1-0D0CF8986267}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "clients", "clients", "{9152046A-93F2-4487-AAFC-7B390E787E83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorClient", "src\clients\RazorClient\RazorClient.csproj", "{97ABB9E8-AB6E-4CD0-931F-674A785F99C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorClient", "src\clients\RazorClient\RazorClient.csproj", "{97ABB9E8-AB6E-4CD0-931F-674A785F99C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E8279621-7E7D-4A73-BF29-1A2EF85DFC5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -77,6 +74,9 @@ Global
 		{97ABB9E8-AB6E-4CD0-931F-674A785F99C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97ABB9E8-AB6E-4CD0-931F-674A785F99C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EBA4980B-4DE9-4A30-8E84-C9BC698C0784} = {94449C0B-9243-4B28-93A2-96AF8AC04A20}
 		{E8279621-7E7D-4A73-BF29-1A2EF85DFC5D} = {EBA4980B-4DE9-4A30-8E84-C9BC698C0784}
@@ -91,5 +91,8 @@ Global
 		{B6570E16-88C8-4170-88D1-0D0CF8986267} = {ACE9874C-67E3-44C1-8FC3-C28CBB40CBDB}
 		{9152046A-93F2-4487-AAFC-7B390E787E83} = {94449C0B-9243-4B28-93A2-96AF8AC04A20}
 		{97ABB9E8-AB6E-4CD0-931F-674A785F99C8} = {9152046A-93F2-4487-AAFC-7B390E787E83}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D9AD64DB-A2AD-4CA5-835E-216FB473311C}
 	EndGlobalSection
 EndGlobal

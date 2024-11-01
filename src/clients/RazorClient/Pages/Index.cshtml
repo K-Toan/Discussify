@@ -8,3 +8,86 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<div class="post-list">
+    <main class="pt-6 pb-12 lg:pt-12 lg:pb-24 bg-transparent dark:bg-gray-900 antialiased">
+        @foreach (var post in Model.Posts)
+        {
+            <div class="mx-auto w-full max-w-2xl border-t border-gray-200 dark:border-gray-700"></div>
+            <div class="flex justify-between px-4 mt-2 mb-2 mx-auto max-w-screen-xl transition duration-200 ease-in-out hover:bg-gray-800 cursor-pointer">
+                <article class="mx-auto w-full max-w-2xl mt-2 mb-2 format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+                    <!-- Header/Author information -->
+                    <div class="not-format">
+                        <address class="flex items-center not-italic">
+                            <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                                <img class="mr-2 w-8 h-8 rounded" src="https://isobarscience-1bfd8.kxcdn.com/wp-content/uploads/2020/09/default-profile-picture1.jpg" alt="@post.AuthorName">
+                                <div>
+                                    <a class="text-sm font-medium text-gray-500 dark:text-gray-400">@(post.CommunityId.HasValue ? ("c/" + post.CommunityName) : ("p/" + post.AuthorName))</a>
+                                    @{
+                                        var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+                                        var createdTimeInVietnam = TimeZoneInfo.ConvertTimeFromUtc(post.CreatedAt, vietnamTimeZone);
+                                        var elapsedTime = DateTimeOffset.Now - createdTimeInVietnam;
+
+                                        string timeAgo;
+
+                                        if (elapsedTime.TotalMinutes < 60)
+                                        {
+                                            timeAgo = $"{Math.Floor(elapsedTime.TotalMinutes)} minute(s) ago";
+                                        }
+                                        else if (elapsedTime.TotalHours < 24)
+                                        {
+                                            timeAgo = $"{Math.Floor(elapsedTime.TotalHours)} hr. ago";
+                                        }
+                                        else
+                                        {
+                                            timeAgo = $"{Math.Floor(elapsedTime.TotalDays)} day(s) ago";
+                                        }
+                                    }
+                                    <span class="text-base text-gray-500 dark:text-gray-400"> • @timeAgo</span>
+                                </div>
+                            </div>
+                        </address>
+                        <h1 class="text-xl font-light leading-tight text-gray-900 lg:mb-1 lg:text-xl dark:text-white">@post.Title</h1>
+
+                        <!-- Body content -->
+                        <p class="body mb-1">
+                            @post.Content @post.Content @post.Content
+                        </p>
+
+                        <!-- Interaction bar -->
+                        <div class="flex items-center space-x-6">
+                            <!-- Upvote Button -->
+                            <button class="flex items-center text-gray-500 hover:text-green-600 dark:hover:text-green-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
+                                <span class="ml-1">@(post.Upvote ?? 0)</span>
+                            </button>
+
+                            <!-- Downvote Button -->
+                            <button class="flex items-center text-gray-500 hover:text-red-600 dark:hover:text-red-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                                <span class="ml-1">@(post.Downvote ?? 0)</span>
+                            </button>
+
+                            <!-- Comment Count -->
+                            <span class="flex items-center text-gray-500 dark:text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 16v-5a2 2 0 00-2-2h-4.586a1 1 0 01-.707-.293l-1.414-1.414a2 2 0 00-1.414-.586H7a2 2 0 00-2 2v10a2 2 0 002 2h11a2 2 0 002-2z" /></svg>
+                                <span class="ml-1">@(post.Comment ?? 0)</span>
+                            </span>
+
+                            @*                         <!-- Share Button -->
+                        <button class="flex items-center text-gray-500 hover:text-blue-600 dark:hover:text-blue-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12v4m0 0a1 1 0 001 1h14a1 1 0 001-1v-4m-1-4a1 1 0 00-1-1h-3m0 0V5a1 1 0 011-1h3m-4 16v-4a1 1 0 00-1-1H5a1 1 0 00-1 1v4m16-8h3" /></svg>
+                        <span class="ml-1">Share</span>
+                        </button>
+
+                        <!-- Options Button (3 dots) -->
+                        <button class="text-gray-500 hover:text-gray-600 dark:hover:text-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm0 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm0 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" /></svg>
+                        </button> *@
+                        </div>
+                    </div>
+                </article>
+            </div>
+        }
+    </main>
+</div>

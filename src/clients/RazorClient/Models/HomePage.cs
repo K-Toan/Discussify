@@ -1,11 +1,10 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using RazorClient.Models;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace RazorClient.Pages;
-
-public class IndexModel : PageModel
+namespace RazorClient.Models
 {
-    public List<PostDto> Posts { get; set; } = new List<PostDto>
+    public class HomePage
+    {
+        public List<PostDto> Posts { get; set; } = new List<PostDto>
         {
             new PostDto(
                 PostId: 1,
@@ -78,13 +77,5 @@ public class IndexModel : PageModel
                 UpdatedAt: new DateTime(2023, 10, 12, 16, 30, 0)
             )
         };
-
-    public IndexModel()
-    {
-    }
-
-    public void OnGet()
-    {
-
     }
 }
