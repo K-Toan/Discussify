@@ -2,13 +2,14 @@
 @model RazorClient.Pages.Posts.CreateModel
 @{
 }
+
 <main class="pt-6 pb-12 lg:pt-12 lg:pb-24 bg-transparent dark:bg-gray-900 antialiased">
-    <form class="pt-3 mt-3 max-w-lg mx-auto">
+    <form class="pt-3 mt-3 max-w-lg mx-auto" method="post">
         <!-- Community -->
         <label class="block mb-2 text-lg font-bold text-gray-900 dark:text-white">Create Post</label>
         <div class="mt-2 mb-2">
-            <label for="community" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose a community</label>
-            <select id="community" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <label asp-for="@Model.CreatePostDto.CommunityId" for="community" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose a community</label>
+            <select asp-for="@Model.CreatePostDto.CommunityId" id="community" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option selected>You</option>
                 @* @foreach() *@
                 <option value="US">United States</option>
@@ -21,8 +22,8 @@
         <!-- Title -->
         <div class="mt-2 mb-2">
             <div>
-                <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
-                <input type="text" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+                <label asp-for="@Model.CreatePostDto.Title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
+                <input asp-for="@Model.CreatePostDto.Title" type="text" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
             </div>
         </div>
 
@@ -107,8 +108,8 @@
                     </div>
                 </div>
                 <div class="px-4 py-2 bg-dark rounded-b-lg dark:bg-gray-800">
-                    <label for="editor" class="sr-only">Publish post</label>
-                    <textarea id="editor" rows="8" class="block w-full px-0 text-sm text-gray-800 bg-dark border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required></textarea>
+                    <label asp-for="@Model.CreatePostDto.Content" for="editor" class="sr-only">Publish post</label>
+                    <textarea asp-for="@Model.CreatePostDto.Content" id="editor" rows="8" class="block w-full px-0 text-sm text-gray-800 bg-dark border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required></textarea>
                 </div>
             </div>
         </div>

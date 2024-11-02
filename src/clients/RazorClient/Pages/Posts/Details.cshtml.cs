@@ -12,6 +12,9 @@ public class DetailsModel : PageModel
     public PostDto PostDto { get; set; }
     public List<CommentDto> CommentDtos { get; set; }
 
+    [BindProperty]
+    public CreateCommentDto CreateCommentDto { get; set; }
+
     public DetailsModel(PostService postService, CommentService commentService)
     {
         _postService = postService;
@@ -32,5 +35,10 @@ public class DetailsModel : PageModel
         CommentDtos = await _commentService.GetPostCommentsByPostId(id);
 
         return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "{id:int}"
+@using System.Security.Claims
 @model DetailsModel
 @{
 }
@@ -73,18 +74,32 @@
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Comments (@Model.PostDto.Comment)</h2>
                     </div>
-                    <form class="mb-6">
-                        <div class="py-2 px-4 mb-4 bg-transparent rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                            <label for="comment" class="sr-only">Your comment</label>
-                            <textarea id="comment" rows="6"
-                                      class="px-0 w-full bg-transparent text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
-                                      placeholder="Write a comment..." required></textarea>
-                        </div>
-                        <button type="submit"
-                                class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                            Submit comment
-                        </button>
-                    </form>
+
+                    <!-- Create a comment -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form class="mb-6" method="post">
+                            <input asp-for="@Model.CreateCommentDto.PostId" value="@Model.PostDto.PostId" disabled hidden />
+                            <input asp-for="@Model.CreateCommentDto.UserId" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" disabled hidden />
+                            <input asp-for="@Model.CreateCommentDto.UserName" value="@User.FindFirst(ClaimTypes.Name)?.Value" disabled hidden />
+                            <div class="py-2 px-4 mb-4 bg-transparent rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                                <label for="comment" class="sr-only">Your comment</label>
+                                <textarea id="comment" rows="6"
+                                          class="px-0 w-full bg-transparent text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+                                          placeholder="Write a comment..." required></textarea>
+                            </div>
+                            <button type="submit"
+                                    class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                                Submit comment
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p class="body mb-1">Login to comment on this post</p>
+                    }
+
+                    <!-- Comment List -->
                     @foreach (var comment in Model.CommentDtos)
                     {
                         <article class="p-6 mb-6 text-base bg-transparent rounded-lg dark:bg-gray-900">
@@ -96,7 +111,7 @@
                                              alt="Michael Gough">@(comment.UserName ?? "Unknown")
                                     </p>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">
-                                        <time >@comment.CreatedAt.AddHours(7)</time>
+                                        <time>@comment.CreatedAt.AddHours(7)</time>
                                     </p>
                                 </div>
                                 <button id="dropdownComment1Button" data-dropdown-toggle="dropdownComment1"

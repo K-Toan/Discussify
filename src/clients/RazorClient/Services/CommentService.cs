@@ -24,4 +24,12 @@ public class CommentService
 
         return null;
     }
+
+    public async Task<bool> CreateCommentAsync(CreateCommentDto request)
+    {
+        var response = await _httpClient.PostAsJsonAsync("http://localhost:5002/api/comments", request);
+
+        return response.IsSuccessStatusCode;
+    }
 }
+

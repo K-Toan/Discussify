@@ -56,6 +56,7 @@ namespace RazorClient.Pages.Authentication
             if (handler.CanReadToken(token))
             {
                 var jwtToken = handler.ReadJwtToken(token);
+
                 return jwtToken.Claims;
             }
 
