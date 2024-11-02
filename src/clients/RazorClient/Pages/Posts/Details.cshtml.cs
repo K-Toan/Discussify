@@ -37,8 +37,17 @@ public class DetailsModel : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostCreateCommentAsync()
     {
+        Console.WriteLine(CreateCommentDto.PostId);
+        Console.WriteLine(CreateCommentDto.UserId);
+        Console.WriteLine(CreateCommentDto.UserName);
+        Console.WriteLine(CreateCommentDto.Content);
 
+        var request = new CreateCommentDto(CreateCommentDto.PostId, null, CreateCommentDto.UserId, CreateCommentDto.UserName, CreateCommentDto.Content);
+
+        await _commentService.CreateCommentAsync(request);
+
+        return RedirectToPage(new { id = CreateCommentDto.PostId });
     }
 }

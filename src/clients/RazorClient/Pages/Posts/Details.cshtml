@@ -78,10 +78,25 @@
                     <!-- Create a comment -->
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <form class="mb-6" method="post">
-                            <input asp-for="@Model.CreateCommentDto.PostId" value="@Model.PostDto.PostId" disabled hidden />
-                            <input asp-for="@Model.CreateCommentDto.UserId" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" disabled hidden />
-                            <input asp-for="@Model.CreateCommentDto.UserName" value="@User.FindFirst(ClaimTypes.Name)?.Value" disabled hidden />
+                        <form class="mb-6" method="post" asp-page-handler="CreateComment">
+                            <input asp-for="@Model.CreateCommentDto.PostId" type="number" value="@Model.PostDto.PostId"  />
+                            <input asp-for="@Model.CreateCommentDto.UserId" type="number" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value"  />
+                            <input asp-for="@Model.CreateCommentDto.UserName" type="text" value="@User.FindFirst(ClaimTypes.Name)?.Value"  />
+                            <div class="py-2 px-4 mb-4 bg-transparent rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                                <label for="comment" class="sr-only">Your comment</label>
+                                <textarea id="comment" type="text" rows="6" asp-for="@Model.CreateCommentDto.Content"
+                                          class="px-0 w-full bg-transparent text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+                                          placeholder="Write a comment..." required></textarea>
+                            </div>
+                            <button type="submit"
+                                    class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                                Submit comment
+                            </button>
+                        </form>
+@*                         <form class="mb-6" method="post" asp-page-handler="CreateComment">
+                            <input name="postId" value="@Model.PostDto.PostId" disabled hidden />
+                            <input name="userId" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" disabled hidden />
+                            <input name="userName" value="@User.FindFirst(ClaimTypes.Name)?.Value" disabled hidden />
                             <div class="py-2 px-4 mb-4 bg-transparent rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                                 <label for="comment" class="sr-only">Your comment</label>
                                 <textarea id="comment" rows="6"
@@ -92,7 +107,7 @@
                                     class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                                 Submit comment
                             </button>
-                        </form>
+                        </form> *@
                     }
                     else
                     {
