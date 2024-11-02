@@ -1,4 +1,4 @@
-using Contracts.MassTransit;
+﻿using Contracts.MassTransit;
 using MassTransit;
 using MassTransit.Transports;
 using MediatR;
@@ -6,6 +6,7 @@ using PostMicroservice.Application.Commands;
 using PostMicroservice.Application.Queries;
 using PostMicroservice.Models;
 using PostMicroservice.Models.Dtos;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PostMicroservice.Application.Services;
 
@@ -41,7 +42,21 @@ public class PostService(IMediator mediator, InteractionGrpcClient interactionGr
         var post = await mediator.Send(new GetPostByIdQuery { PostId = postId });
 
         // get interactions
-        var interactionCount = await interactionGrpcClient.GetInteractionByPostIdAsync(postId);
+        var interactionCount = new InteractionCountDto
+        {
+            Upvote = 0,
+            Downvote = 0,
+            Comment = 0,
+        };
+        try
+        {
+            // Get interactions
+            interactionCount = await interactionGrpcClient.GetInteractionByPostIdAsync(postId);
+        }
+        catch (Exception ex)
+        {
+            Console.Write($"Error occurred while fetching interactions for postId: {postId}");
+        }
 
         var postDto = new PostDto
         {
