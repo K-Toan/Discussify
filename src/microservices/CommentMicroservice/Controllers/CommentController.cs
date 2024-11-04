@@ -59,11 +59,13 @@ public class CommentsController : ControllerBase
 
         await _commentRepository.AddAsync(comment);
 
-        await _publishEndpoint.Publish(new CommentCreated(comment.UserId, comment.CommentId, comment.PostId));
-
         var result = await _commentRepository.SaveChangesAsync() > 0;
 
-        if(!result)
+        await _publishEndpoint.Publish(new CommentCreated(comment.UserId, comment.PostId, comment.CommentId));
+        Console.WriteLine(comment.UserId + " " + comment.CommentId + " " + comment.PostId);
+        await _commentRepository.SaveChangesAsync();
+
+        if (!result)
         {
             return BadRequest("Could not save changes to DB!");
         }

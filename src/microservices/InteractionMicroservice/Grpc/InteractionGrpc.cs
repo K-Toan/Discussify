@@ -34,7 +34,7 @@ public class InteractionGrpc : InteractionService.InteractionServiceBase
                 };
             }
 
-
+            //Console.WriteLine(interactionCount.Upvote + " " + interactionCount.Downvote + " " + interactionCount.Comment);
             return new GetInteractionByPostIdResponse
             {
                 InteractionCount = new PostInteractionCount

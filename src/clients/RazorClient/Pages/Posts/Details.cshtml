@@ -79,9 +79,9 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <form class="mb-6" method="post" asp-page-handler="CreateComment">
-                            <input asp-for="@Model.CreateCommentDto.PostId" type="number" value="@Model.PostDto.PostId"  />
-                            <input asp-for="@Model.CreateCommentDto.UserId" type="number" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value"  />
-                            <input asp-for="@Model.CreateCommentDto.UserName" type="text" value="@User.FindFirst(ClaimTypes.Name)?.Value"  />
+                            <input asp-for="@Model.CreateCommentDto.PostId" type="number" value="@Model.PostDto.PostId" hidden />
+                            <input asp-for="@Model.CreateCommentDto.UserId" type="number" value="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" hidden />
+                            <input asp-for="@Model.CreateCommentDto.UserName" type="text" value="@User.FindFirst(ClaimTypes.Name)?.Value" hidden />
                             <div class="py-2 px-4 mb-4 bg-transparent rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                                 <label for="comment" class="sr-only">Your comment</label>
                                 <textarea id="comment" type="text" rows="6" asp-for="@Model.CreateCommentDto.Content"
