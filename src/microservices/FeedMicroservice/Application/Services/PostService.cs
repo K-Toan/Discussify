@@ -86,9 +86,9 @@ public class PostService : IPostService
         var filter = Builders<Post>.Filter.Eq(p => p.PostId, postId);
 
         var updateDefinition = Builders<Post>.Update
-            .Inc(p => p.Upvote, upvote)
-            .Inc(p => p.Downvote, downvote)
-            .Inc(p => p.Comment, comment);
+            .Set(p => p.Upvote, upvote)
+            .Set(p => p.Downvote, downvote)
+            .Set(p => p.Comment, comment);
 
         var result = await _posts.UpdateOneAsync(filter, updateDefinition);
 
