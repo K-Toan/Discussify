@@ -1,6 +1,7 @@
 using MongoDB.Driver;
 using FeedMicroservice.Models;
 using FeedMicroservice.Infrastructure;
+using MongoDB.Bson;
 
 namespace FeedMicroservice.Application.Services;
 
@@ -17,12 +18,19 @@ public class PostService : IPostService
     {
         var filter = Builders<Post>.Filter.Eq(p => p.PostId, postId);
         var post = await _posts.Find(filter).FirstOrDefaultAsync();
-        
+
         return post ?? throw new KeyNotFoundException($"Post with ID {postId} not found.");
     }
 
-    public async Task<IEnumerable<Post>> GetPostsAsync(int pageIndex, int pageSize, string orderBy)
+    public async Task<IEnumerable<Post>> GetPostsAsync(int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
     {
+        var filterDefinition = Builders<Post>.Filter.Empty;
+
+        if (!string.IsNullOrWhiteSpace(keyword))
+        {
+            filterDefinition = Builders<Post>.Filter.Regex(p => p.Title, new BsonRegularExpression(keyword, "i"));
+        }
+
         var sortDefinition = orderBy.ToLower() switch
         {
             "createdat" => Builders<Post>.Sort.Descending(p => p.CreatedAt),
@@ -31,7 +39,7 @@ public class PostService : IPostService
             _ => Builders<Post>.Sort.Descending(p => p.CreatedAt)
         };
 
-        return await _posts.Find(_ => true)
+        return await _posts.Find(filterDefinition)
                            .Sort(sortDefinition)
                            .Skip((pageIndex - 1) * pageSize)
                            .Limit(pageSize)
