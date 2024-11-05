@@ -52,6 +52,9 @@ namespace CommentMicroservice.Infrastructure.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
                     b.HasKey("CommentId");
 
                     b.ToTable("Comments");

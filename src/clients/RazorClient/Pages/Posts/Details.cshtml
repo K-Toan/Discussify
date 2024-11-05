@@ -8,13 +8,13 @@
     <main class="pt-6 pb-12 lg:pt-12 lg:pb-24 bg-transparent dark:bg-gray-900 antialiased">
         <div class="flex justify-between px-4 mt-2 mb-2 mx-auto max-w-screen-xl">
             <article class="mx-auto w-full max-w-2xl mt-2 mb-2 format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
-                <!-- Header/Author information -->
+                <!-- Header/User information -->
                 <div class="not-format">
                     <address class="flex items-center not-italic">
                         <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-                            <img class="mr-2 w-8 h-8 rounded" src="https://isobarscience-1bfd8.kxcdn.com/wp-content/uploads/2020/09/default-profile-picture1.jpg" alt="@Model.PostDto.AuthorName">
+                            <img class="mr-2 w-8 h-8 rounded" src="https://isobarscience-1bfd8.kxcdn.com/wp-content/uploads/2020/09/default-profile-picture1.jpg" alt="@Model.PostDto.UserName">
                             <div>
-                                <a class="text-sm font-medium text-gray-500 dark:text-gray-400">@(Model.PostDto.CommunityId.HasValue ? ("c/" + Model.PostDto.CommunityName) : ("p/" + Model.PostDto.AuthorName))</a>
+                                <a class="text-sm font-medium text-gray-500 dark:text-gray-400">@(Model.PostDto.CommunityId.HasValue ? ("c/" + Model.PostDto.CommunityName) : ("p/" + Model.PostDto.UserName))</a>
                                 @* Tính toán thời gian đã đăng *@
                                 @{
                                     var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
@@ -123,7 +123,7 @@
                                     <p class="inline-flex items-center mr-3 font-semibold text-sm text-gray-900 dark:text-white">
                                         <img class="mr-2 w-6 h-6 rounded"
                                              src="https://isobarscience-1bfd8.kxcdn.com/wp-content/uploads/2020/09/default-profile-picture1.jpg"
-                                             alt="Michael Gough">@(comment.UserName ?? "Unknown")
+                                             alt="user">@(comment.UserName ?? "Unknown")
                                     </p>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">
                                         <time>@comment.CreatedAt.AddHours(7)</time>

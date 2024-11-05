@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorClient.Models;
 using RazorClient.Services;
+using System.Security.Claims;
 
 namespace RazorClient.Pages.Posts;
 
@@ -10,6 +11,7 @@ namespace RazorClient.Pages.Posts;
 public class CreateModel : PageModel
 {
     private readonly PostService _postService;
+
     [BindProperty]
     public CreatePostDto CreatePostDto { get; set; }
 
@@ -25,7 +27,13 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnPost()
     {
-        Console.WriteLine(CreatePostDto.Title + " " + CreatePostDto.Content);
+        CreatePostDto.UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        CreatePostDto.UserName = User.FindFirstValue(ClaimTypes.Name);
+
+        Console.WriteLine("Author: " + CreatePostDto.UserName);
+        Console.WriteLine("Community: " + CreatePostDto.CommunityName);
+        Console.WriteLine("Title: " + CreatePostDto.Title);
+        Console.WriteLine("Content: " + CreatePostDto.Content);
 
         await _postService.CreatePostAsync(CreatePostDto);
 

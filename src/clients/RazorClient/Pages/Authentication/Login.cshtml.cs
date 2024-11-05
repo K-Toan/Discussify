@@ -52,10 +52,19 @@ namespace RazorClient.Pages.Authentication
         private IEnumerable<Claim> GetClaimsFromToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();
+            var tokenHandler = new JwtSecurityTokenHandler();
+
 
             if (handler.CanReadToken(token))
             {
                 var jwtToken = handler.ReadJwtToken(token);
+
+                Console.WriteLine("Loggin in with claims: ");
+
+                foreach (var claim in jwtToken.Claims)
+                {
+                    Console.WriteLine($"Type: {claim.Type}, Value: {claim.Value}");
+                }
 
                 return jwtToken.Claims;
             }

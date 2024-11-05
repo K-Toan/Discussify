@@ -25,8 +25,8 @@ public class PostService(IMediator mediator, InteractionGrpcClient interactionGr
             CommunityId = p.CommunityId,
             CommunityName = p.CommunityName,
 
-            AuthorId = p.AuthorId,
-            AuthorName = p.AuthorName,
+            UserId = p.UserId,
+            UserName = p.UserName,
 
             CreatedAt = p.CreatedAt,
             UpdatedAt = p.UpdatedAt,
@@ -67,8 +67,8 @@ public class PostService(IMediator mediator, InteractionGrpcClient interactionGr
             CommunityId = post.CommunityId,
             CommunityName = post.CommunityName,
 
-            AuthorId = post.AuthorId,
-            AuthorName = post.AuthorName,
+            UserId = post.UserId,
+            UserName = post.UserName,
 
             Upvote = interactionCount.Upvote,
             Downvote = interactionCount.Downvote,

@@ -11,10 +11,10 @@ public class Post
     public int PostId { get; set; }
 
     [Required]
-    public int AuthorId { get; set; }
+    public int UserId { get; set; }
 
     [NotNull]
-    public string AuthorName { get; set; } = "Unknown";
+    public string UserName { get; set; } = "Unknown";
 
     [AllowNull]
     public int? CommunityId { get; set; }

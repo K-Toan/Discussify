@@ -13,9 +13,9 @@ public class PostDto
     public int? CommunityId { get; set; }
     public string? CommunityName { get; set; }
 
-    // author
-    public int AuthorId { get; set; }
-    public string AuthorName { get; set; } = string.Empty;
+    // Author
+    public int UserId { get; set; }
+    public string UserName { get; set; } = string.Empty;
 
     // interaction count
     public int Upvote { get; set; } = 0;

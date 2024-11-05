@@ -17,6 +17,9 @@ public class Comment
     [Required]
     public int UserId { get; set; }
 
+    [AllowNull]
+    public string? UserName { get; set; }
+
     [Required]
     public string Content { get; set; } = string.Empty;
 

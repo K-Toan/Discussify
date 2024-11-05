@@ -11,11 +11,11 @@
             <div class="mx-auto w-full max-w-2xl border-t border-gray-200 dark:border-gray-700"></div>
             <div class="flex justify-between px-4 mt-2 mb-2 mx-auto max-w-screen-xl">
                 <article class="mx-auto w-full max-w-2xl mt-2 mb-2 format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
-                    <!-- Header/Author information -->
+                    <!-- Header/User information -->
                     <div class="not-format">
                         <address class="flex items-center not-italic">
                             <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-                                <img class="mr-2 w-8 h-8 rounded" src="https://isobarscience-1bfd8.kxcdn.com/wp-content/uploads/2020/09/default-profile-picture1.jpg" alt="@post.AuthorName">
+                                <img class="mr-2 w-8 h-8 rounded" src="https://isobarscience-1bfd8.kxcdn.com/wp-content/uploads/2020/09/default-profile-picture1.jpg" alt="@post.UserName">
                                 <div>
                                     @if (post.CommunityId.HasValue)
                                     {
@@ -23,7 +23,7 @@
                                     }
                                     else
                                     {
-                                        <a asp-page="User/" asp-route-id="@post.AuthorId" class="text-sm font-medium text-gray-500 dark:text-gray-400">@("p/" + post.AuthorName)</a>
+                                        <a asp-page="User/" asp-route-id="@post.UserId" class="text-sm font-medium text-gray-500 dark:text-gray-400">@("p/" + post.UserName)</a>
                                     }
                                     @{
                                         var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
