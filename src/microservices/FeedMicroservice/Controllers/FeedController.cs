@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FeedMicroservice.Controllers;
 
 [ApiController]
-[Route("api")]
+[Route("api/feed")]
 public class FeedController(IPostService postService) : ControllerBase
 {
     [HttpGet("homepage")]

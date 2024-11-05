@@ -10,12 +10,6 @@ public class UserInteractedConsumer(IPostService postService) : IConsumer<UserIn
     {
         Console.WriteLine("--> Consuming updating post interaction count: " + context.Message.PostId);
 
-        var post = await postService.GetPostById(context.Message.PostId);
-
-        post.Upvote = context.Message.Upvote;
-        post.Downvote = context.Message.Downvote;
-        post.Comment = context.Message.Comment;
-
-        await postService.UpdatePostAsync(post);
+        await postService.UpdatePostInteractionAsync(context.Message.PostId, context.Message.Upvote, context.Message.Downvote, context.Message.Comment);
     }
 }

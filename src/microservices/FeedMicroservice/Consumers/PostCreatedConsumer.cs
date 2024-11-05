@@ -2,6 +2,7 @@ using MassTransit;
 using Contracts.MassTransit;
 using FeedMicroservice.Application.Services;
 using FeedMicroservice.Models;
+using MongoDB.Bson;
 
 namespace FeedMicroservice.Consumers;
 
@@ -11,7 +12,8 @@ public class PostCreatedConsumer(IPostService postService) : IConsumer<PostCreat
     {
         Console.WriteLine("--> Consuming post created: " + context.Message.PostId);
 
-        var post = new Post{
+        var post = new Post
+        {
             PostId = context.Message.PostId,
             AuthorId = context.Message.AuthorId,
             AuthorName = context.Message.AuthorName,

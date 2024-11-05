@@ -3,11 +3,18 @@ using InteractionMicroservice.Models;
 using InteractionMicroservice.Models.Enums;
 using InteractionMicroservice.Models.Dtos;
 using InteractionMicroservice.Infrastructure.Repositories;
+using MassTransit;
+using Contracts.MassTransit;
 
 namespace InteractionMicroservice.Services;
 
-public class InteractionService(IInteractionRepository interactionRepository, IInteractionCountRepository interactionCountRepository)
+public class InteractionService(IInteractionRepository interactionRepository, IInteractionCountRepository interactionCountRepository, IPublishEndpoint publishEndpoint)
 {
+    public async Task<InteractionCount> GetInteractionCountAsync(int postId, int? commentId)
+    {
+        return await interactionCountRepository.GetByPostIdAndCommentIdAsync(postId, commentId);
+    }
+
     public async Task HandleInteractionAsync(InteractionDto interactionDto)
     {
         try
@@ -49,6 +56,12 @@ public class InteractionService(IInteractionRepository interactionRepository, II
                     await AddInteractionAsync(interactionDto);
                 }
             }
+
+            var interactionCount = await interactionCountRepository.GetByPostIdAndCommentIdAsync(interactionDto.PostId, interactionDto.CommentId);
+
+            UserInteracted userInteracted = new UserInteracted(interactionDto.PostId, interactionCount.Upvote, interactionCount.Downvote, interactionCount.Comment);
+
+            await publishEndpoint.Publish(userInteracted);
         }
         catch (Exception ex)
         {

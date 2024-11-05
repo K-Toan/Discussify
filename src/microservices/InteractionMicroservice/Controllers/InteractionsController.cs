@@ -1,15 +1,12 @@
-using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using InteractionMicroservice.Models.Dtos;
 using InteractionMicroservice.Services;
-using MassTransit;
-using Contracts.MassTransit;
-using Microsoft.AspNetCore.Mvc;
 
 namespace InteractionMicroservice.Controllers;
 
 [ApiController]
 [Route("api/interactions")]
-public class InteractionsController(InteractionService interactionService, IPublishEndpoint publishEndpoint) : ControllerBase
+public class InteractionsController(InteractionService interactionService) : ControllerBase
 {
     [HttpPost]
     // this api handle user upvote/downvote interaction only

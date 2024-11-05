@@ -18,7 +18,7 @@ public class FeedDbContext
         var client = new MongoClient(connectionUri);
         _database = client.GetDatabase(databaseName);
 
-        CreateIndexes().Wait();
+        // CreateIndexes().Wait();
     }
     
     public IMongoDatabase Database => _database;

@@ -64,12 +64,35 @@ public class PostService : IPostService
     public async Task UpdatePostAsync(Post post)
     {
         var filter = Builders<Post>.Filter.Eq(p => p.PostId, post.PostId);
+
         var updateDefinition = Builders<Post>.Update
-            .Set(p => p, post);
+            .Set(p => p.AuthorName, post.AuthorName)
+            .Set(p => p.CommunityName, post.CommunityName)
+            .Set(p => p.Title, post.Title)
+            .Set(p => p.Content, post.Content)
+            .Set(p => p.Upvote, post.Upvote)
+            .Set(p => p.Downvote, post.Downvote)
+            .Set(p => p.Comment, post.Comment)
+            .CurrentDate("UpdatedAt");
 
         var result = await _posts.UpdateOneAsync(filter, updateDefinition);
 
         if (result.MatchedCount == 0)
             throw new KeyNotFoundException($"Post with ID {post.PostId} not found.");
+    }
+
+    public async Task UpdatePostInteractionAsync(int postId, int upvote, int downvote, int comment)
+    {
+        var filter = Builders<Post>.Filter.Eq(p => p.PostId, postId);
+
+        var updateDefinition = Builders<Post>.Update
+            .Inc(p => p.Upvote, upvote)
+            .Inc(p => p.Downvote, downvote)
+            .Inc(p => p.Comment, comment);
+
+        var result = await _posts.UpdateOneAsync(filter, updateDefinition);
+
+        if (result.MatchedCount == 0)
+            throw new KeyNotFoundException($"Post with ID {postId} not found.");
     }
 }
