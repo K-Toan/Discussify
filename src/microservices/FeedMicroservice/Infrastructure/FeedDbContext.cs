@@ -33,8 +33,8 @@ public class FeedDbContext
         var idIndexModel = new CreateIndexModel<Post>(idIndex, new CreateIndexOptions { Unique = true });
         await posts.Indexes.CreateOneAsync(idIndexModel);
 
-        var authorIdIndex = Builders<Post>.IndexKeys.Ascending(p => p.AuthorId);
-        await posts.Indexes.CreateOneAsync(new CreateIndexModel<Post>(authorIdIndex));
+        var UserIdIndex = Builders<Post>.IndexKeys.Ascending(p => p.UserId);
+        await posts.Indexes.CreateOneAsync(new CreateIndexModel<Post>(UserIdIndex));
 
         var communityIdIndex = Builders<Post>.IndexKeys.Ascending(p => p.CommunityId);
         await posts.Indexes.CreateOneAsync(new CreateIndexModel<Post>(communityIdIndex));

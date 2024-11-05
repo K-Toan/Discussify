@@ -66,7 +66,7 @@ public class PostService : IPostService
         var filter = Builders<Post>.Filter.Eq(p => p.PostId, post.PostId);
 
         var updateDefinition = Builders<Post>.Update
-            .Set(p => p.AuthorName, post.AuthorName)
+            .Set(p => p.UserName, post.UserName)
             .Set(p => p.CommunityName, post.CommunityName)
             .Set(p => p.Title, post.Title)
             .Set(p => p.Content, post.Content)

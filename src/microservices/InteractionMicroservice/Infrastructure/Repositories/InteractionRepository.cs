@@ -1,12 +1,18 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using InteractionMicroservice.Models;
+using InteractionMicroservice.Models.Enums;
 
 namespace InteractionMicroservice.Infrastructure.Repositories;
 
 public class InteractionRepository(InteractionDbContext context) : IInteractionRepository
 {
-    public async Task<Interaction> GetInteractionAsync(ObjectId? interactionId = null, int? userId = null, int? postId = null, int? commentId = null)
+    public async Task<Interaction> GetInteractionByIdAsync(ObjectId interactionId)
+    {
+        return await context.Interactions.Find(Builders<Interaction>.Filter.Eq(i => i.InteractionId, interactionId)).FirstOrDefaultAsync();
+    }
+
+    public async Task<Interaction> GetInteractionAsync(ObjectId? interactionId, int? userId, int? postId, int? commentId, InteractionType type, bool excludeType = false)
     {
         var filters = new List<FilterDefinition<Interaction>>();
 
@@ -21,6 +27,33 @@ public class InteractionRepository(InteractionDbContext context) : IInteractionR
 
         if (commentId.HasValue)
             filters.Add(Builders<Interaction>.Filter.Eq(i => i.CommentId, commentId));
+
+        filters.Add(excludeType ? Builders<Interaction>.Filter.Ne(i => i.Type, type) : Builders<Interaction>.Filter.Eq(i => i.Type, type));
+
+        var filter = filters.Any()
+            ? Builders<Interaction>.Filter.And(filters)
+            : Builders<Interaction>.Filter.Empty;
+
+        return await context.Interactions.Find(filter).FirstOrDefaultAsync();
+    }
+
+    public async Task<Interaction> GetVoteInteractionAsync(int? userId, int? postId, int? commentId)
+    {
+        var filters = new List<FilterDefinition<Interaction>>();
+
+        if (userId.HasValue)
+            filters.Add(Builders<Interaction>.Filter.Eq(i => i.UserId, userId));
+
+        if (postId.HasValue)
+            filters.Add(Builders<Interaction>.Filter.Eq(i => i.PostId, postId));
+
+        if (commentId.HasValue)
+            filters.Add(Builders<Interaction>.Filter.Eq(i => i.CommentId, commentId));
+
+        filters.Add(Builders<Interaction>.Filter.Or(
+            Builders<Interaction>.Filter.Eq(i => i.Type, InteractionType.Upvote),
+            Builders<Interaction>.Filter.Eq(i => i.Type, InteractionType.Downvote)
+        ));
 
         var filter = filters.Any()
             ? Builders<Interaction>.Filter.And(filters)

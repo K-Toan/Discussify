@@ -10,51 +10,38 @@ namespace InteractionMicroservice.Services;
 
 public class InteractionService(IInteractionRepository interactionRepository, IInteractionCountRepository interactionCountRepository, IPublishEndpoint publishEndpoint)
 {
-    public async Task<InteractionCount> GetInteractionCountAsync(int postId, int? commentId)
-    {
-        return await interactionCountRepository.GetByPostIdAndCommentIdAsync(postId, commentId);
-    }
-
     public async Task HandleInteractionAsync(InteractionDto interactionDto)
     {
         try
         {
-            // if interaction is comment interaction
-            if (interactionDto.Type == InteractionType.Comment)
+            switch (interactionDto.Type)
             {
-                // create new
-                await AddInteractionAsync(interactionDto);
-            }
-            // else, vote interaction
-            else
-            {
-                // check if user is already voted
-                var existingInteraction = await interactionRepository.GetInteractionAsync(null, interactionDto.UserId, interactionDto.PostId, interactionDto.CommentId);
-
-                // if user voted
-                if (existingInteraction != null)
-                {
-                    Console.WriteLine("interaction is not null");
-
-                    // case 1: existing interaction has the same vote type
-                    // remove existing interaction (needs interactionId or all ids and its vote type)
-                    if (existingInteraction.Type == interactionDto.Type)
-                    {
-                        await RemoveInteractionAsync(existingInteraction.InteractionId, interactionDto);
-                    }
-                    // case 2: existing interaction has the different vote type
-                    // update existing interaction
-                    else
-                    {
-                        await UpdateInteractionAsync(existingInteraction.InteractionId, interactionDto);
-                    }
-                }
-                // if not
-                else
-                {
-                    // create new
+                case InteractionType.Comment:
                     await AddInteractionAsync(interactionDto);
-                }
+                    break;
+
+                case InteractionType.Upvote:
+                case InteractionType.Downvote:
+                    var voteInteraction = await interactionRepository.GetVoteInteractionAsync(interactionDto.UserId,
+                                                                                              interactionDto.PostId,
+                                                                                              interactionDto.CommentId);
+
+                    // user did not voted on this
+                    if (voteInteraction == null)
+                    {
+                        await AddInteractionAsync(interactionDto);
+                        break;
+                    }
+
+                    if (interactionDto.Type == voteInteraction.Type)
+                        await RemoveInteractionAsync(voteInteraction.InteractionId);
+                    else
+                        await UpdateInteractionAsync(voteInteraction.InteractionId, interactionDto);
+
+                    break;
+
+                default:
+                    break;
             }
 
             var interactionCount = await interactionCountRepository.GetByPostIdAndCommentIdAsync(interactionDto.PostId, interactionDto.CommentId);
@@ -101,13 +88,13 @@ public class InteractionService(IInteractionRepository interactionRepository, II
     private async Task UpdateInteractionAsync(ObjectId interactionId, InteractionDto interactionDto)
     {
         // remove existing interaction and create new interaction
-        await RemoveInteractionAsync(interactionId, interactionDto);
+        await RemoveInteractionAsync(interactionId);
         await AddInteractionAsync(interactionDto);
     }
 
-    private async Task RemoveInteractionAsync(ObjectId interactionId, InteractionDto interactionDto)
+    private async Task RemoveInteractionAsync(ObjectId interactionId)
     {
-        var existingInteraction = await interactionRepository.GetInteractionAsync(interactionId, null, null, null);
+        var existingInteraction = await interactionRepository.GetInteractionByIdAsync(interactionId);
 
         var interactionCount = new InteractionCount
         {

@@ -30,6 +30,7 @@ public class CreateModel : PageModel
         CreatePostDto.UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         CreatePostDto.UserName = User.FindFirstValue(ClaimTypes.Name);
 
+        Console.WriteLine("--> Creating post with: ");
         Console.WriteLine("Author: " + CreatePostDto.UserName);
         Console.WriteLine("Community: " + CreatePostDto.CommunityName);
         Console.WriteLine("Title: " + CreatePostDto.Title);

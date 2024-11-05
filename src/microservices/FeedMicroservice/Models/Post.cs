@@ -8,8 +8,8 @@ public class Post
     [BsonId]
     public ObjectId Id { get; set; }
     public int PostId { get; set; }
-    public int AuthorId { get; set; }
-    public string AuthorName { get; set; }
+    public int UserId { get; set; }
+    public string UserName { get; set; }
     public int? CommunityId { get; set; }
     public string CommunityName { get; set; }
     public string Title { get; set; }

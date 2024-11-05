@@ -11,7 +11,7 @@ public class PostCreatedConsumer(IPostService postService) : IConsumer<PostCreat
     public async Task Consume(ConsumeContext<PostCreated> context)
     {
         Console.WriteLine("--> Consuming post created: " + context.Message.PostId);
-        Console.WriteLine("--> Author: " + context.Message.AuthorName);
+        Console.WriteLine("--> User: " + context.Message.UserName);
         Console.WriteLine("--> Community: " + context.Message.CommunityName ?? "NULL");
         Console.WriteLine("--> Title: " + context.Message.Title);
         Console.WriteLine("--> Content: " + context.Message.Content);
@@ -19,8 +19,8 @@ public class PostCreatedConsumer(IPostService postService) : IConsumer<PostCreat
         var post = new Post
         {
             PostId = context.Message.PostId,
-            AuthorId = context.Message.AuthorId,
-            AuthorName = context.Message.AuthorName,
+            UserId = context.Message.UserId,
+            UserName = context.Message.UserName,
             CommunityId = context.Message.CommunityId,
             CommunityName = context.Message.CommunityName,
             Title = context.Message.Title,
