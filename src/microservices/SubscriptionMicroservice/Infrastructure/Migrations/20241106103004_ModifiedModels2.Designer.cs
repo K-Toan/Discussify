@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SubscriptionMicroservice.Infrastructure;
@@ -11,9 +12,11 @@ using SubscriptionMicroservice.Infrastructure;
 namespace SubscriptionMicroservice.Infrastructure.Migrations
 {
     [DbContext(typeof(SubscriptionDbContext))]
-    partial class SubscriptionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241106103004_ModifiedModels2")]
+    partial class ModifiedModels2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,9 +39,8 @@ namespace SubscriptionMicroservice.Infrastructure.Migrations
                     b.Property<int>("CreatorId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("CreatorName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CreatorName")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");

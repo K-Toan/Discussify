@@ -1,51 +1,77 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SubscriptionMicroservice.Infrastructure;
 using SubscriptionMicroservice.Models;
+using SubscriptionMicroservice.Models.Dtos;
 
 namespace SubscriptionMicroservice.Endpoints;
 
 public static class CommunityEndpoints
 {
-    public static void MapCommunityEndpoints(this WebApplication app)
+        public static void MapCommunityEndpoints(this WebApplication app)
     {
         // GET all communities from the database.
         // Endpoint: GET /api/communities
-        app.MapGet("/api/communities", async (SubscriptionDbContext context) =>
+        app.MapGet("/api/communities", async (SubscriptionDbContext context, IMapper mapper) =>
         {
-            var communities = await context.Communities.ToListAsync();
-            return Results.Ok(communities);
+            var communities = await context.Communities.Where(c => c.DeletedAt == null).ToListAsync();
+            var communityDtos = mapper.Map<List<CommunityDto>>(communities);
+            return Results.Ok(communityDtos);
         });
 
         // GET a specific community by CommunityId.
         // Endpoint: GET /api/communities/{id}
-        app.MapGet("/api/communities/{id:int}", async (int id, SubscriptionDbContext context) =>
-        {
-            var community = await context.Communities.FindAsync(id);
-            return community is not null ? Results.Ok(community) : Results.NotFound();
-        });
-
-        // CREATE a new community and store it in the database.
-        // Endpoint: POST /api/communities
-        app.MapPost("/api/communities", async (Community community, SubscriptionDbContext context) =>
-        {
-            context.Communities.Add(community);
-            await context.SaveChangesAsync();
-            return Results.Created($"/api/communities/{community.CommunityId}", community);
-        });
-
-        // UPDATE an existing community by replacing it with updated data.
-        // Endpoint: PUT /api/communities/{id}
-        app.MapPut("/api/communities/{id:int}", async (int id, Community updatedCommunity, SubscriptionDbContext context) =>
+        app.MapGet("/api/communities/{id:int}", async (int id, SubscriptionDbContext context, IMapper mapper) =>
         {
             var community = await context.Communities.FindAsync(id);
             if (community is null) return Results.NotFound();
 
-            community.Name = updatedCommunity.Name;
-            community.Description = updatedCommunity.Description;
+            var communityDto = mapper.Map<CommunityDto>(community);
+            return Results.Ok(communityDto);
+        });
+
+        // GET user subscribed communities.
+        app.MapGet("/api/users/{userId:int}/communities", async (int userId, SubscriptionDbContext context, IMapper mapper) =>
+        {
+            var communities = await context.Subscriptions
+                .Where(s => s.UserId == userId)
+                .Join(
+                    context.Communities,
+                    subscription => subscription.CommunityId,
+                    community => community.CommunityId,
+                    (subscription, community) => community
+                )
+                .ToListAsync();
+
+            var communityDtos = mapper.Map<List<CommunityDto>>(communities);
+            return communityDtos.Any() ? Results.Ok(communityDtos) : Results.NotFound();
+        });
+
+        // CREATE a new community and store it in the database.
+        // Endpoint: POST /api/communities
+        app.MapPost("/api/communities", async (CreateCommunityDto createCommunityDto, SubscriptionDbContext context, IMapper mapper) =>
+        {
+            var community = mapper.Map<Community>(createCommunityDto);
+            context.Communities.Add(community);
+            await context.SaveChangesAsync();
+
+            var communityDto = mapper.Map<CommunityDto>(community);
+            return Results.Created($"/api/communities/{community.CommunityId}", communityDto);
+        });
+
+        // UPDATE an existing community by replacing it with updated data.
+        // Endpoint: PUT /api/communities/{id}
+        app.MapPut("/api/communities/{id:int}", async (int id, UpdateCommunityDto updateCommunityDto, SubscriptionDbContext context, IMapper mapper) =>
+        {
+            var community = await context.Communities.FindAsync(id);
+            if (community is null) return Results.NotFound();
+
+            mapper.Map(updateCommunityDto, community);
             community.UpdatedAt = DateTime.UtcNow;
 
             await context.SaveChangesAsync();
-            return Results.Ok(community);
+            var communityDto = mapper.Map<CommunityDto>(community);
+            return Results.Ok(communityDto);
         });
 
         // DELETE a community by its CommunityId.
@@ -55,7 +81,8 @@ public static class CommunityEndpoints
             var community = await context.Communities.FindAsync(id);
             if (community is null) return Results.NotFound();
 
-            context.Communities.Remove(community);
+            community.DeletedAt = DateTime.UtcNow;
+
             await context.SaveChangesAsync();
             return Results.NoContent();
         });

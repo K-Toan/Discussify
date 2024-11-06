@@ -1,3 +1,5 @@
+using CommentMicroservice.Mappings;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SubscriptionMicroservice.Endpoints;
 using SubscriptionMicroservice.Infrastructure;
@@ -7,13 +9,14 @@ var config = builder.Configuration;
 
 builder.Services.AddEndpointsApiExplorer();
 
+// mapping
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 // dbcontext
 builder.Services.AddDbContext<SubscriptionDbContext>(options =>
 {
     options.UseNpgsql(config.GetConnectionString("SubscriptionMicroserviceDB"));
 });
-
-//
 
 var app = builder.Build();
 
