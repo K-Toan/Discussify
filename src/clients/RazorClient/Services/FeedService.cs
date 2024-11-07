@@ -22,7 +22,7 @@ public class FeedService
             s = "users/" + userId.Value + "/";
 
         if(communityId.HasValue)
-            s = "communities/" + userId.Value + "/";
+            s = "communities/" + communityId.Value + "/";
 
         var query = $"?pageIndex={pageIndex}&pageSize={pageSize}&orderBy={orderBy}&keyword={Uri.EscapeDataString(keyword)}";
         var url = $"http://localhost:5005/api/feed/{s}posts{query}";

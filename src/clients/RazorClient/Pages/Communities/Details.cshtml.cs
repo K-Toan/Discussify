@@ -28,6 +28,7 @@ namespace RazorClient.Pages.Communities
         {
             Community = await _subscriptionService.GetCommunityById(id);
             Posts = await _feedService.GetPostsAsync(null, id);
+
             return Page();
         }
 

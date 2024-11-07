@@ -52,12 +52,6 @@ public class IndexModel : PageModel
             type = interactionType
         };
 
-        Console.WriteLine("Vote on post with id: " + postId);
-        Console.WriteLine("With user id: " + currentUserId);
-        Console.WriteLine("With type: " + interactionType);
-
-        Console.WriteLine(requestBody.userId + " " + requestBody.postId + " " + requestBody.type);
-
         var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
 
         try

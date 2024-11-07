@@ -42,8 +42,7 @@ public class CreateModel : PageModel
         if(communityId.HasValue)
         {
             var community = await _subscriptionService.GetCommunityById(communityId.Value);
-            Console.WriteLine(community.CommunityId);
-            Console.WriteLine(community.Name);
+
             CreatePostDto.CommunityId = community.CommunityId;
             CreatePostDto.CommunityName = community.Name;
         }
