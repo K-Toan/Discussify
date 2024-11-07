@@ -10,11 +10,25 @@ public class FeedController(IPostService postService) : ControllerBase
     [HttpGet("homepage")]
     public async Task<IActionResult> HomePage()
     {
-        return Ok(await postService.GetPostsAsync());
+        return Ok();
     }
 
-    public async Task<IActionResult> GetPosts(int pageSize = 1, int pageIndex = 10, string orderBy = "createdat", string keyword = "")
+    [HttpGet("posts")]
+    public async Task<IActionResult> GetPosts(int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
     {
-        return Ok(await postService.GetPostsAsync(pageIndex, pageIndex, orderBy, keyword));
+        return Ok(await postService.GetPostsAsync(pageIndex, pageSize, orderBy, keyword, null, null));
     }
+    
+    [HttpGet("users/{userId:int}/posts")]
+    public async Task<IActionResult> GetPostsByUserId(int userId, int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
+    {
+        return Ok(await postService.GetPostsAsync(pageIndex, pageSize, orderBy, keyword, userId, null));
+    }
+    
+    [HttpGet("communities/{communityId:int}/posts")]
+    public async Task<IActionResult> GetPostsByCommunityId(int communityId, int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
+    {
+        return Ok(await postService.GetPostsAsync(pageIndex, pageSize, orderBy, keyword, null, communityId));
+    }
+
 }

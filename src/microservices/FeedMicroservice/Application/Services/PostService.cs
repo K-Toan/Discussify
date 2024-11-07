@@ -22,16 +22,28 @@ public class PostService : IPostService
         return post ?? throw new KeyNotFoundException($"Post with ID {postId} not found.");
     }
 
-    public async Task<IEnumerable<Post>> GetPostsAsync(int pageIndex, int pageSize, string orderBy, string keyword)
+    public async Task<IEnumerable<Post>> GetPostsAsync(int pageIndex, int pageSize, string orderBy, string keyword, int? userId, int? communityId)
     {
-        var filterDefinition = Builders<Post>.Filter.Empty;
+        var filterDefinitions = new List<FilterDefinition<Post>>();
 
         if (!string.IsNullOrWhiteSpace(keyword))
         {
-            filterDefinition = Builders<Post>.Filter.Regex(p => p.Title, new BsonRegularExpression(keyword, "i"));
+            filterDefinitions.Add(Builders<Post>.Filter.Regex(p => p.Title, new BsonRegularExpression(keyword, "i")));
         }
 
-        var sortDefinition = orderBy.ToLower() switch
+        if (userId.HasValue)
+        {
+            filterDefinitions.Add(Builders<Post>.Filter.Eq(p => p.UserId, userId.Value));
+        }
+
+        if (communityId.HasValue)
+        {
+            filterDefinitions.Add(Builders<Post>.Filter.Eq(p => p.CommunityId, communityId.Value));
+        }
+
+        var filterDefinition = filterDefinitions.Count > 0 ? Builders<Post>.Filter.And(filterDefinitions) : Builders<Post>.Filter.Empty;
+
+        var sortDefinition = orderBy?.ToLower() switch
         {
             "createdat" => Builders<Post>.Sort.Descending(p => p.CreatedAt),
             "upvote" => Builders<Post>.Sort.Descending(p => p.Upvote),

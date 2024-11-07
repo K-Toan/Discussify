@@ -14,10 +14,18 @@ public class FeedService
         _httpClient.BaseAddress = new Uri(BaseUrl);
     }
 
-    public async Task<List<PostDto>> GetPostsAsync(int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
+    public async Task<List<PostDto>> GetPostsAsync(int? userId, int? communityId, int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
     {
+        var s = "";
+        
+        if(userId.HasValue)
+            s = "users/" + userId.Value + "/";
+
+        if(communityId.HasValue)
+            s = "communities/" + userId.Value + "/";
+
         var query = $"?pageIndex={pageIndex}&pageSize={pageSize}&orderBy={orderBy}&keyword={Uri.EscapeDataString(keyword)}";
-        var url = $"http://localhost:5005/api/feed/homepage{query}";
+        var url = $"http://localhost:5005/api/feed/{s}posts{query}";
 
         var response = await _httpClient.GetAsync(url);
 
@@ -28,5 +36,6 @@ public class FeedService
 
         return new List<PostDto>();
     }
+
 
 }

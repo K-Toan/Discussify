@@ -26,9 +26,9 @@ public class IndexModel : PageModel
         _feedService = feedService;
     }
 
-    public async Task<IActionResult> OnGetAsync()
+    public async Task<IActionResult> OnGetAsync(int pageIndex = 1, int pageSize = 100, string orderBy = "createdat", string keyword = "")
     {
-        Posts = await _feedService.GetPostsAsync();
+        Posts = await _feedService.GetPostsAsync(null, null, pageIndex, pageSize, orderBy, keyword);
 
         foreach (var post in Posts)
         {
