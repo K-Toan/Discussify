@@ -33,18 +33,21 @@ public static class CommunityEndpoints
         // GET user subscribed communities.
         app.MapGet("/api/users/{userId:int}/communities", async (int userId, SubscriptionDbContext context, IMapper mapper) =>
         {
-            var communities = await context.Subscriptions
+            var communityDtos = await context.Subscriptions
+                .Include(s => s.Community)
                 .Where(s => s.UserId == userId)
-                .Join(
-                    context.Communities,
-                    subscription => subscription.CommunityId,
-                    community => community.CommunityId,
-                    (subscription, community) => community
-                )
+                .Select(s => new CommunityDto
+                {
+                    CommunityId = s.Community.CommunityId,
+                    CreatorId = s.Community.CreatorId,
+                    CreatorName = s.Community.CreatorName,
+                    Name = s.Community.Name,
+                    Description = s.Community.Description,
+                    CreatedAt = s.Community.CreatedAt
+                })
                 .ToListAsync();
 
-            var communityDtos = mapper.Map<List<CommunityDto>>(communities);
-            return communityDtos.Any() ? Results.Ok(communityDtos) : Results.NotFound();
+            return Results.Ok(communityDtos);
         });
 
         // CREATE a new community and store it in the database.

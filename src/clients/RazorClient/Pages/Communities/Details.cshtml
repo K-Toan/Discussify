@@ -1,0 +1,51 @@
+﻿@page "{id:int}"
+@model RazorClient.Pages.Communities.DetailsModel
+@{
+}
+
+<div class="pt-5 pb-5"></div>
+
+<div class="container mx-auto p-4 max-w-5xl">
+    <!-- Header Section -->
+    <div class="bg-blue-700 rounded-lg p-6 text-white mb-4 flex items-center space-x-4">
+        <!-- Avatar -->
+        <img src="https://www.shutterstock.com/image-vector/group-abstract-diverse-people-friends-600nw-2121864335.jpg" alt="Avatar" class="w-16 h-16 rounded-full object-cover border-2 border-white">
+
+        <!-- Community Information -->
+        <div>
+            <h1 class="text-3xl font-bold">@Model.Community.Name</h1>
+            <p class="text-gray-200">@Model.Community.Description</p>
+            <div class="text-sm mt-2">
+                <span>Created by <strong>@Model.Community.CreatorName</strong></span> •
+                <span>@Model.Community.CreatedAt.ToString("MMMM dd, yyyy")</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Left Column (Posts) -->
+        <div class="w-full lg:w-3/4">
+            <!-- Create Post Form -->
+            <div class="bg-dark p-4 rounded-lg shadow mb-4">
+                <form method="post" asp-page="/Communities/Details" asp-page-handler="JoinCommunity" asp-route-communityId="@Model.Community.CommunityId">
+                    <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">Join</button>
+                    <a type="button" asp-page="/Posts/Create" asp-route-communityId="@Model.Community.CommunityId" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">New Post</a>
+                </form>
+            </div>
+
+            <!-- List of Posts -->
+            <!-- Thêm danh sách các bài viết nếu có -->
+        </div>
+
+        <!-- Right Column (Community Info) -->
+        <div class="w-full lg:w-1/4 bg-dark p-4 rounded-lg shadow">
+            <h3 class="text-lg font-semibold">About Community</h3>
+            <p class="text-gray-600 mt-2">@Model.Community.Description</p>
+            <div class="mt-4">
+                <p><strong>@Model.Community.CreatedAt.ToString("MMMM yyyy")</strong></p>
+                <p class="text-gray-600">Founded by <strong>@Model.Community.CreatorName</strong></p>
+            </div>
+        </div>
+    </div>
+</div>

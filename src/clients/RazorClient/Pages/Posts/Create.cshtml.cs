@@ -25,7 +25,7 @@ public class CreateModel : PageModel
 
     }
 
-    public async Task<IActionResult> OnPost()
+    public async Task<IActionResult> OnPost(int? communityId)
     {
         CreatePostDto.UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         CreatePostDto.UserName = User.FindFirstValue(ClaimTypes.Name);

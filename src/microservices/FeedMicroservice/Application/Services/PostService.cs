@@ -22,7 +22,7 @@ public class PostService : IPostService
         return post ?? throw new KeyNotFoundException($"Post with ID {postId} not found.");
     }
 
-    public async Task<IEnumerable<Post>> GetPostsAsync(int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
+    public async Task<IEnumerable<Post>> GetPostsAsync(int pageIndex, int pageSize, string orderBy, string keyword)
     {
         var filterDefinition = Builders<Post>.Filter.Empty;
 

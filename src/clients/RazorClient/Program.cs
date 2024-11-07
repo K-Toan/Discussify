@@ -23,6 +23,7 @@ builder.Services.AddAuthentication(options =>
 // services
 builder.Services.AddScoped<FeedService>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<SubscriptionService>();
 builder.Services.AddScoped<CommentService>();
 builder.Services.AddScoped<AuthService>();
 
