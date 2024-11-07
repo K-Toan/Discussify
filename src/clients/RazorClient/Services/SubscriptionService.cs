@@ -19,11 +19,6 @@ public class SubscriptionService
 
         var result = await response.Content.ReadFromJsonAsync<CommunityDto>();
 
-        Console.WriteLine(result.CommunityId);
-        Console.WriteLine(result.CreatorId);
-        Console.WriteLine(result.CreatorName);
-        Console.WriteLine(result.Name);
-
         return result;
     }
 
@@ -60,5 +55,21 @@ public class SubscriptionService
         };
 
         var response = await _httpClient.PostAsJsonAsync(BaseUrl + "subscriptions/" + userId + "/communities/" + communityId, request);
+    }
+
+    public async Task LeaveCommunity(int userId, int communityId)
+    {
+        var request = new
+        {
+            userId,
+            communityId
+        };
+
+        var response = await _httpClient.PostAsJsonAsync(BaseUrl + "subscriptions/" + userId + "/communities/" + communityId, request);
+    }
+
+    public async Task CreateComunityAsync(CreateCommunityDto request)
+    {
+        var response = await _httpClient.PostAsJsonAsync(BaseUrl + "communities", request); 
     }
 }

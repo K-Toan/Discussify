@@ -7,12 +7,6 @@ namespace FeedMicroservice.Controllers;
 [Route("api/feed")]
 public class FeedController(IPostService postService) : ControllerBase
 {
-    [HttpGet("homepage")]
-    public async Task<IActionResult> HomePage()
-    {
-        return Ok();
-    }
-
     [HttpGet("posts")]
     public async Task<IActionResult> GetPosts(int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
     {

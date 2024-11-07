@@ -28,17 +28,12 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int pageIndex = 1, int pageSize = 100, string orderBy = "createdat", string keyword = "")
     {
-        Posts = await _feedService.GetPostsAsync(null, null, pageIndex, pageSize, orderBy, keyword);
-
-        foreach (var post in Posts)
+        if(string.IsNullOrEmpty(keyword))
         {
-            Console.WriteLine("Post with id " + post.PostId + " has:");
-            Console.WriteLine("Author: " + post.UserName);
-            Console.WriteLine("Community: " + post.CommunityName ?? "NULL");
-            Console.WriteLine("Upvote Count: " + post.Upvote);
-            Console.WriteLine("Downvote Count: " + post.Downvote);
-            Console.WriteLine("Comment Count: " + post.Comment);
+            keyword = "";
         }
+
+        Posts = await _feedService.GetPostsAsync(null, null, pageIndex, pageSize, orderBy, keyword);
 
         return Page();
     }

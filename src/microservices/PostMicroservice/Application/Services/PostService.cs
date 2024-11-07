@@ -89,6 +89,7 @@ public class PostService(IMediator mediator, InteractionGrpcClient interactionGr
             UserId = createPostDto.UserId,
             UserName = createPostDto.UserName,
             CommunityId = createPostDto.CommunityId,
+            CommunityName = createPostDto.CommunityName,
             Title = createPostDto.Title,
             Content = createPostDto.Content,
             CreatedAt = DateTime.UtcNow

@@ -8,7 +8,7 @@ namespace SubscriptionMicroservice.Endpoints;
 
 public static class CommunityEndpoints
 {
-        public static void MapCommunityEndpoints(this WebApplication app)
+    public static void MapCommunityEndpoints(this WebApplication app)
     {
         // GET all communities from the database.
         // Endpoint: GET /api/communities

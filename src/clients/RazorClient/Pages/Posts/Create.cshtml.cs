@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorClient.Models;
 using RazorClient.Services;
 using System.Security.Claims;
+using System.Xml.Linq;
 
 namespace RazorClient.Pages.Posts;
 
@@ -11,18 +12,26 @@ namespace RazorClient.Pages.Posts;
 public class CreateModel : PageModel
 {
     private readonly PostService _postService;
+    private readonly SubscriptionService _subscriptionService;
 
     [BindProperty]
     public CreatePostDto CreatePostDto { get; set; }
 
-    public CreateModel(PostService postService)
+    [BindProperty]
+    public List<CommunityDto> JoinedCommunities { get; set; }
+
+    public CreateModel(PostService postService, SubscriptionService subscriptionService)
     {
         _postService = postService;
+        _subscriptionService = subscriptionService;
     }
 
-    public void OnGet()
+    public async Task<IActionResult> OnGet()
     {
+        int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
+        JoinedCommunities = await _subscriptionService.GetUserJoinedCommunitiesAsync(userId);
 
+        return Page();
     }
 
     public async Task<IActionResult> OnPost(int? communityId)
@@ -30,14 +39,16 @@ public class CreateModel : PageModel
         CreatePostDto.UserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         CreatePostDto.UserName = User.FindFirstValue(ClaimTypes.Name);
 
-        Console.WriteLine("--> Creating post with: ");
-        Console.WriteLine("Author: " + CreatePostDto.UserName);
-        Console.WriteLine("Community: " + CreatePostDto.CommunityName);
-        Console.WriteLine("Title: " + CreatePostDto.Title);
-        Console.WriteLine("Content: " + CreatePostDto.Content);
+        if(communityId.HasValue)
+        {
+            var community = await _subscriptionService.GetCommunityById(communityId.Value);
+            Console.WriteLine(community.CommunityId);
+            Console.WriteLine(community.Name);
+            CreatePostDto.CommunityId = community.CommunityId;
+            CreatePostDto.CommunityName = community.Name;
+        }
 
         await _postService.CreatePostAsync(CreatePostDto);
-
         return RedirectToPage("/Index");
     }
 }
