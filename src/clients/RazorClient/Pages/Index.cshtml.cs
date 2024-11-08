@@ -15,13 +15,14 @@ public class IndexModel : PageModel
 {
     private readonly FeedService _feedService;
     private readonly HttpClient _httpClient;
-
+    private readonly OfflinePostService _offlinePostService;
     public List<PostDto> Posts { get; set; }
 
-    public IndexModel(HttpClient httpClient, FeedService feedService)
+    public IndexModel(HttpClient httpClient, FeedService feedService, OfflinePostService offlinePostService)
     {
         _httpClient = httpClient;
         _feedService = feedService;
+        _offlinePostService = offlinePostService;
     }
 
     public async Task<IActionResult> OnGetAsync(int pageIndex = 1, int pageSize = 100, string orderBy = "createdat", string keyword = "")
@@ -72,5 +73,19 @@ public class IndexModel : PageModel
         }
 
         return RedirectToPage();
+    }
+
+    public async Task<JsonResult> OnPostSavePostAsync(int postId)
+    {
+        try
+        {
+            await _offlinePostService.SavePost(postId);
+            return new JsonResult(new { success = true });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving post: {ex.Message}");
+            return new JsonResult(new { success = false, error = ex.Message });
+        }
     }
 }

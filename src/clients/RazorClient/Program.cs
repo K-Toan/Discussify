@@ -1,11 +1,17 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using RazorClient.Data;
 using RazorClient.Services;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
 builder.Services.AddHttpClient();
 builder.Services.AddRazorPages();
+
+// sqlite dbcontext 
+builder.Services.AddDbContext<OfflinePostDbContext>(options => options.UseSqlite("Data Source=savedPosts.db"));
 
 // auth
 builder.Services.AddAuthentication(options =>
@@ -26,8 +32,15 @@ builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<SubscriptionService>();
 builder.Services.AddScoped<CommentService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<OfflinePostService>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<OfflinePostDbContext>();
+    dbContext.Database.Migrate();
+}
 
 if (!app.Environment.IsDevelopment())
 {

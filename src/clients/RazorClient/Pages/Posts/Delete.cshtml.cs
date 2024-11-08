@@ -1,12 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RazorClient.Services;
 
-namespace RazorClient.Pages.Posts
+namespace RazorClient.Pages.Posts;
+
+public class DeleteModel : PageModel
 {
-    public class DeleteModel : PageModel
+    private readonly PostService _postService;
+
+    public DeleteModel(PostService postService)
     {
-        public void OnGet()
-        {
-        }
+        _postService = postService;
+    }
+
+    public async Task<IActionResult> OnGet(int postId, string redirectUrl)
+    {
+        await _postService.DeletePostAsync(postId);
+
+        return Redirect(redirectUrl);
     }
 }
