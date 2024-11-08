@@ -8,9 +8,9 @@ namespace FeedMicroservice.Controllers;
 public class FeedController(IPostService postService) : ControllerBase
 {
     [HttpGet("posts")]
-    public async Task<IActionResult> GetPosts(int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
+    public async Task<IActionResult> GetPosts(int? userId, int? communityId, int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
     {
-        return Ok(await postService.GetPostsAsync(pageIndex, pageSize, orderBy, keyword, null, null));
+        return Ok(await postService.GetPostsAsync(pageIndex, pageSize, orderBy, keyword, userId, communityId));
     }
     
     [HttpGet("users/{userId:int}/posts")]

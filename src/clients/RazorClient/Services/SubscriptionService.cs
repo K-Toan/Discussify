@@ -1,4 +1,5 @@
 ﻿using RazorClient.Models;
+using System.Collections.Generic;
 
 namespace RazorClient.Services;
 
@@ -65,11 +66,23 @@ public class SubscriptionService
             communityId
         };
 
-        var response = await _httpClient.PostAsJsonAsync(BaseUrl + "subscriptions/" + userId + "/communities/" + communityId, request);
+        var response = await _httpClient.DeleteAsync(BaseUrl + "subscriptions/" + userId + "/communities/" + communityId);
     }
 
     public async Task CreateComunityAsync(CreateCommunityDto request)
     {
-        var response = await _httpClient.PostAsJsonAsync(BaseUrl + "communities", request); 
+        var response = await _httpClient.PostAsJsonAsync(BaseUrl + "communities", request);
+    }
+
+    public async Task<List<SubscriptionDto>> GetSubscriptionsByUserId(int userId)
+    {
+        var response = await _httpClient.GetAsync(BaseUrl + $"users/{userId}/subscriptions");
+
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<List<SubscriptionDto>>();
+        }
+
+        return new List<SubscriptionDto>();
     }
 }

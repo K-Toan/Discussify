@@ -28,10 +28,26 @@
         <div class="w-full lg:w-3/4">
             <!-- Create Post Form -->
             <div class="bg-dark p-4 rounded-lg shadow mb-4">
-                <form method="post" asp-page="/Communities/Details" asp-page-handler="JoinCommunity" asp-route-communityId="@Model.Community.CommunityId">
-                    <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">Join</button>
-                    <a type="button" asp-page="/Posts/Create" asp-route-communityId="@Model.Community.CommunityId" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">New Post</a>
-                </form>
+                @{
+                    var isJoined = false;
+                    foreach (var subscription in Model.Subscriptions)
+                    {
+                        if (subscription.CommunityId == Model.Community.CommunityId)
+                        {
+                            isJoined = true;
+                        }
+                    }
+
+                    if (isJoined)
+                    {
+                        <a type="button" href="/Communities/LeaveCommunity?communityId=@(Model.Community.CommunityId)&redirectUrl=/Communities/Details/@(Model.Community.CommunityId)" class="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-blue-500">Leave</a>
+                        <a type="button" asp-page="/Posts/Create" asp-route-communityId="@Model.Community.CommunityId" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">New Post</a>
+                    }
+                    else
+                    {
+                        <a type="button" href="/Communities/JoinCommunity?communityId=@(Model.Community.CommunityId)&redirectUrl=/Communities/Details/@(Model.Community.CommunityId)" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500">Join</a>
+                    }
+                }
             </div>
 
             <!-- List of Posts -->

@@ -16,16 +16,17 @@ public class FeedService
 
     public async Task<List<PostDto>> GetPostsAsync(int? userId, int? communityId, int pageIndex = 1, int pageSize = 10, string orderBy = "createdat", string keyword = "")
     {
-        var s = "";
-        
+        string additional = "";
         if(userId.HasValue)
-            s = "users/" + userId.Value + "/";
-
+        {
+            additional += "userId=" + userId.Value + "&";
+        }
         if(communityId.HasValue)
-            s = "communities/" + communityId.Value + "/";
-
-        var query = $"?pageIndex={pageIndex}&pageSize={pageSize}&orderBy={orderBy}&keyword={Uri.EscapeDataString(keyword)}";
-        var url = $"http://localhost:5005/api/feed/{s}posts{query}";
+        {
+            additional += "communityId=" + communityId.Value + "&";   
+        }
+        var query = $"?{additional}pageIndex={pageIndex}&pageSize={pageSize}&orderBy={orderBy}&keyword={Uri.EscapeDataString(keyword)}";
+        var url = $"http://localhost:5005/api/feed/posts{query}";
 
         var response = await _httpClient.GetAsync(url);
 
