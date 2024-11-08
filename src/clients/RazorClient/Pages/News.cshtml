@@ -1,0 +1,90 @@
+﻿@page
+@model RazorClient.Pages.NewsModel
+@{
+}
+
+<div class="post-list pt-5">
+    <main class="pt-5 pb-12 lg:pt-12 lg:pb-24 bg-transparent dark:bg-gray-900 antialiased">
+        @foreach (var post in Model.Posts)
+        {
+            <div class="mx-auto w-full max-w-2xl border-t border-gray-200 dark:border-gray-700"></div>
+            <div class="flex justify-between px-4 mt-2 mb-2 mx-auto max-w-screen-xl">
+                <article class="mx-auto w-full max-w-2xl mt-2 mb-2 format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+                    <!-- Header/User information -->
+                    <div class="not-format">
+                        <address class="flex items-center not-italic">
+                            <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                                <img class="mr-2 w-8 h-8 rounded" src="https://isobarscience-1bfd8.kxcdn.com/wp-content/uploads/2020/09/default-profile-picture1.jpg" alt="@post.UserName">
+                                <div>
+                                    @if (post.CommunityId.HasValue)
+                                    {
+                                        <a asp-page="Community/" asp-route-id="@post.CommunityId" class="text-sm font-medium text-gray-500 dark:text-gray-400">@("c/" + post.CommunityName)</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-page="User/" asp-route-id="@post.UserId" class="text-sm font-medium text-gray-500 dark:text-gray-400">@("p/" + post.UserName)</a>
+                                    }
+                                    @{
+                                        var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+                                        var createdTimeInVietnam = TimeZoneInfo.ConvertTimeFromUtc(post.CreatedAt, vietnamTimeZone);
+                                        var elapsedTime = DateTimeOffset.Now - createdTimeInVietnam;
+
+                                        string timeAgo;
+
+                                        if (elapsedTime.TotalMinutes < 60)
+                                        {
+                                            timeAgo = $"{Math.Floor(elapsedTime.TotalMinutes)} minute(s) ago";
+                                        }
+                                        else if (elapsedTime.TotalHours < 24)
+                                        {
+                                            timeAgo = $"{Math.Floor(elapsedTime.TotalHours)} hr. ago";
+                                        }
+                                        else
+                                        {
+                                            timeAgo = $"{Math.Floor(elapsedTime.TotalDays)} day(s) ago";
+                                        }
+                                    }
+                                    <span class="text-base text-gray-500 dark:text-gray-400"> • @timeAgo</span>
+                                </div>
+                            </div>
+                        </address>
+                        <a asp-page="Posts/Details/" asp-route-id="@post.PostId" class="text-xl font-light leading-tight text-gray-900 lg:mb-1 lg:text-xl dark:text-white">@post.Title</a>
+
+                        <!-- Body content -->
+                        <p class="body mb-1">
+                            @post.Content
+                        </p>
+
+                        <!-- Interaction bar -->
+                        <div class="flex items-center space-x-6">
+                            <!-- Upvote Button -->
+                            <form method="post" asp-page-handler="Vote" asp-route-interactionType="0" asp-route-postId="@post.PostId">
+                                <button type="submit" class="flex items-center text-gray-500 hover:text-green-600 dark:hover:text-green-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                    </svg>
+                                    <span class="ml-1">@(post.Upvote ?? 0)</span>
+                                </button>
+                            </form>
+
+                            <!-- Downvote Button -->
+                            <form method="post" asp-page-handler="Vote" asp-route-interactionType="1" asp-route-postId="@post.PostId">
+                                <button type="submit" class="flex items-center text-gray-500 hover:text-red-600 dark:hover:text-red-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                    <span class="ml-1">@(post.Downvote ?? 0)</span>
+                                </button>
+                            </form>
+
+                            <!-- Comment Count -->
+                            <span class="flex items-center text-gray-500 dark:text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 16v-5a2 2 0 00-2-2h-4.586a1 1 0 01-.707-.293l-1.414-1.414a2 2 0 00-1.414-.586H7a2 2 0 00-2 2v10a2 2 0 002 2h11a2 2 0 002-2z" /></svg>
+                                <span class="ml-1">@(post.Comment ?? 0)</span>
+                            </span>
+                        </div>
+                </article>
+            </div>
+        }
+    </main>
+</div>

@@ -47,8 +47,8 @@ public class PostService
 
     public async Task<bool> UpdatePostAsync(UpdatePostDto request)
     {
-        var response = await _httpClient.PutAsJsonAsync("http://localhost:5001/api/posts", request);
-
+        var response = await _httpClient.PutAsJsonAsync("http://localhost:5001/api/posts/" + request.PostId, request);
+        Console.WriteLine("http://localhost:5001/api/posts/" + request.PostId);
         return response.IsSuccessStatusCode;
     }
 

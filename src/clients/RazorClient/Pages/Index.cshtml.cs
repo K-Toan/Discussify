@@ -14,14 +14,12 @@ namespace RazorClient.Pages;
 public class IndexModel : PageModel
 {
     private readonly FeedService _feedService;
-    private readonly PostService _postService;
     private readonly HttpClient _httpClient;
 
     public List<PostDto> Posts { get; set; }
 
-    public IndexModel(PostService postService, HttpClient httpClient, FeedService feedService)
+    public IndexModel(HttpClient httpClient, FeedService feedService)
     {
-        _postService = postService;
         _httpClient = httpClient;
         _feedService = feedService;
     }

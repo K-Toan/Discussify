@@ -1,0 +1,35 @@
+﻿@page "{postId:int}"
+@model RazorClient.Pages.Posts.UpdateModel
+
+<main class="pt-6 pb-12 lg:pt-12 lg:pb-24 bg-transparent dark:bg-gray-900 antialiased">
+    <form class="pt-3 mt-3 max-w-lg mx-auto" method="post">
+        <!-- Community -->
+        <label class="block mb-2 text-lg font-bold text-gray-900 dark:text-white">Update Post</label>
+
+        <input asp-for="@Model.UpdatePostDto.PostId" type="number" id="postId" required hidden/>
+
+        <!-- Title -->
+        <div class="mt-2 mb-2">
+            <label asp-for="@Model.UpdatePostDto.Title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
+            <input asp-for="@Model.UpdatePostDto.Title" type="text" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+        </div>
+
+        <!-- Content -->
+        <div class="mt-2 mb-2">
+            <label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
+            <textarea asp-for="@Model.UpdatePostDto.Content" id="content" rows="8" class="block w-full px-0 text-sm text-gray-800 bg-dark border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" required></textarea>
+        </div>
+
+        <button type="submit" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+            Update post
+        </button>
+    </form>
+</main>
+
+<script>
+    function updateCommunityName() {
+        var communitySelect = document.getElementById("community");
+        var selectedOption = communitySelect.options[communitySelect.selectedIndex];
+        document.getElementById("communityName").value = selectedOption.getAttribute("data-name");
+    }
+</script>

@@ -36,7 +36,7 @@ public class CreateModel : PageModel
             
             await _subscriptionService.CreateComunityAsync(request);
 
-            return RedirectToPage("Communities/Index");
+            return RedirectToPage("Communities");
         }
 
         return RedirectToPage("Authentication/Login");

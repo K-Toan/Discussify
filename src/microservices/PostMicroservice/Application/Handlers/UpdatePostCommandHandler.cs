@@ -5,10 +5,11 @@ using PostMicroservice.Application.Commands;
 using MassTransit;
 using Contracts.MassTransit;
 using PostMicroservice.Infrastructure;
+using MassTransit.RetryPolicies;
 
 namespace PostMicroservice.Application.Hanlders;
 
-public class UpdatePostCommandHandler(IMapper mapper, PostDbContext context, IPostRepository postRepository, IPublishEndpoint publishEndpoint) : IRequestHandler<UpdatePostCommand>
+public class UpdatePostCommandHandler(PostDbContext context, IPostRepository postRepository, IPublishEndpoint publishEndpoint) : IRequestHandler<UpdatePostCommand>
 {
     public async Task Handle(UpdatePostCommand request, CancellationToken cancellationToken)
     {
@@ -22,22 +23,30 @@ public class UpdatePostCommandHandler(IMapper mapper, PostDbContext context, IPo
                     throw new Exception($"Post with ID {request.PostId} not found.");
                 }
 
-                mapper.Map(request, existingPost);
+                Console.WriteLine("---> Updating post: " + existingPost.Title);
+
+                existingPost.Title = request.Title;
+                existingPost.Content = request.Content;
+                existingPost.UpdatedAt = DateTime.UtcNow;
+
                 await postRepository.UpdateAsync(existingPost);
 
+                Console.WriteLine("Updated");
+
                 // publish to outbox  
-                await publishEndpoint.Publish(new PostUpdated(request.PostId, request.Title, request.Title, request.UpdatedAt));
+                await publishEndpoint.Publish(new PostUpdated(request.PostId, request.Title, request.Content, request.UpdatedAt));
 
                 // save changes
                 await postRepository.SaveChangesAsync();
+                Console.WriteLine("Published");
 
                 transaction.Commit();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 transaction.Rollback();
 
-                throw new Exception("Create post transaction not completed!");
+                throw new Exception(ex.Message);
             }
         }
     }
