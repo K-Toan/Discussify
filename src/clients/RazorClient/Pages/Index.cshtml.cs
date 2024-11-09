@@ -14,22 +14,34 @@ namespace RazorClient.Pages;
 public class IndexModel : PageModel
 {
     private readonly FeedService _feedService;
+    private readonly UserService _userService;
     private readonly HttpClient _httpClient;
     private readonly OfflinePostService _offlinePostService;
+
+    public List<UserDto> Users { get; set; }
     public List<PostDto> Posts { get; set; }
 
-    public IndexModel(HttpClient httpClient, FeedService feedService, OfflinePostService offlinePostService)
+    public IndexModel(HttpClient httpClient, FeedService feedService, OfflinePostService offlinePostService, UserService userService)
     {
         _httpClient = httpClient;
         _feedService = feedService;
         _offlinePostService = offlinePostService;
+        _userService = userService;
     }
 
-    public async Task<IActionResult> OnGetAsync(int pageIndex = 1, int pageSize = 100, string orderBy = "createdat", string keyword = "")
+    public async Task<IActionResult> OnGetAsync(int? userId, int? communityId, int pageIndex = 1, int pageSize = 100, string orderBy = "createdat", string keyword = "")
     {
         if(string.IsNullOrEmpty(keyword))
         {
             keyword = "";
+        }
+
+        Users = await _userService.GetUsers(keyword);
+
+        if(Users != null)
+        {
+            foreach (UserDto user in Users) 
+                Console.WriteLine(user.UserName);
         }
 
         Posts = await _feedService.GetPostsAsync(null, null, pageIndex, pageSize, orderBy, keyword);

@@ -6,6 +6,18 @@
 
 <div class="post-list pt-5">
     <main class="pt-5 pb-12 lg:pt-12 lg:pb-24 bg-transparent dark:bg-gray-900 antialiased">
+        @if(Model.Users != null && Model.Users.Count > 0)
+        {
+            <div class="flex justify-between px-4 mt-2 mb-2 mx-auto max-w-screen-xl">
+                <article class="mx-auto w-full max-w-2xl mt-2 mb-2 format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+                    <span class="text-base text-white-500 dark:text-white-400">Found @Model.Users.Count user(s)</span>
+                    @foreach(var user in Model.Users)
+                    {
+                        <br/><a href="Users/Details/@user.UserId">@user.UserName</a> 
+                    }
+                </article>
+            </div>
+        }
         @if(Model.Posts.Count == 0)
         {
             <span class="text-base text-white-500 dark:text-white-400">No posts found</span>
