@@ -35,8 +35,10 @@ public class IndexModel : PageModel
         {
             keyword = "";
         }
-
-        Users = await _userService.GetUsers(keyword);
+        else
+        {
+            Users = await _userService.GetUsers(keyword);
+        }
 
         if(Users != null)
         {
