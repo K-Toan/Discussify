@@ -35,6 +35,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FeedService>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<CommentService>();
 builder.Services.AddScoped<OfflinePostService>();
 builder.Services.AddScoped<SubscriptionService>();

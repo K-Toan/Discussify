@@ -5,12 +5,20 @@
 }
 <div class="pt-5 pb-5"></div>
 
-<div id="messagesContainer"></div>
+<div id="messagesContainer">
+    @foreach (var message in Model.Messages)
+    {
+        <div>@message.UserName: @message.Message</div>
+    }
+</div>
 <input type="text" id="messageInput" placeholder="Enter message..." />
 <button id="sendMessageBtn">Send</button>
 
 <script src="https://cdn.jsdelivr.net/npm/@("@")microsoft/signalr@8.0.7/dist/browser/signalr.min.js"></script>
 <script>
+    const userId = @Model.CurrentUserId;
+    const userName = '@Model.CurrentUserName';
+    const communityId = @Model.Community.CommunityId;
     const communityName = '@Model.Community.Name';
 
     const connection = new signalR.HubConnectionBuilder()
@@ -36,9 +44,8 @@
 
     document.getElementById("sendMessageBtn").addEventListener("click", function () {
         const message = document.getElementById("messageInput").value;
-        const user = '@Model.CurrentUserName';
 
-        connection.invoke("SendMessage", communityName, user, message).catch(function (err) {
+        connection.invoke("SendMessage", userId, userName, communityId, communityName, message).catch(function (err) {
             return console.error(err.toString());
         });
 

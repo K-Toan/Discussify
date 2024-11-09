@@ -1,12 +1,21 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using RazorClient.Services;
 
 namespace RazorClient.Hubs
 {
     public class TalkHub : Hub
     {
-        public async Task SendMessage(string communityName, string user, string message)
+        private readonly ChatService _chatService;
+
+        public TalkHub(ChatService chatService)
         {
-            await Clients.Group(communityName).SendAsync("ReceiveMessage", user, message);
+            _chatService = chatService;
+        }
+        public async Task SendMessage(int userId, string userName, int communityId, string communityName, string message)
+        {
+            await _chatService.SaveMessageAsync(userId, userName, communityId, communityName, message);
+
+            await Clients.Group(communityName).SendAsync("ReceiveMessage", userName, message);
         }
 
         public async Task JoinGroup(string communityName)

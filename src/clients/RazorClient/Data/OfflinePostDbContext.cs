@@ -8,4 +8,5 @@ public class OfflinePostDbContext : DbContext
     public OfflinePostDbContext(DbContextOptions<OfflinePostDbContext> options) : base(options) { }
 
     public DbSet<OfflinePost> OfflinePosts { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
 }

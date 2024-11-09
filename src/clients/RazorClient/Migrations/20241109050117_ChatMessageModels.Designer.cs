@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RazorClient.Data;
 
@@ -10,9 +11,11 @@ using RazorClient.Data;
 namespace RazorClient.Migrations
 {
     [DbContext(typeof(OfflinePostDbContext))]
-    partial class OfflinePostDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241109050117_ChatMessageModels")]
+    partial class ChatMessageModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
