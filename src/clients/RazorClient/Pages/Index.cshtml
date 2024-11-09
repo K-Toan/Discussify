@@ -6,6 +6,10 @@
 
 <div class="post-list pt-5">
     <main class="pt-5 pb-12 lg:pt-12 lg:pb-24 bg-transparent dark:bg-gray-900 antialiased">
+        @if(Model.Posts.Count == 0)
+        {
+            <span class="text-base text-white-500 dark:text-white-400">No posts found</span>
+        }
         @foreach (var post in Model.Posts)
         {
             <div class="mx-auto w-full max-w-2xl border-t border-gray-200 dark:border-gray-700"></div>
