@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using RazorClient.Data;
+using RazorClient.Hubs;
 using RazorClient.Services;
 using System;
 
@@ -25,6 +26,9 @@ builder.Services.AddAuthentication(options =>
     cookieOptions.LogoutPath = "/Authentication/Logout";
     //cookieOptions.AccessDeniedPath = "/Authentication/AccessDenied";
 });
+
+// signalR
+builder.Services.AddSignalR();
 
 // services
 builder.Services.AddScoped<AuthService>();
@@ -57,5 +61,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.MapHub<TalkHub>("/talkHub");
 
 app.Run();

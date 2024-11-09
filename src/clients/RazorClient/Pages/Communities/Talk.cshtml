@@ -1,0 +1,47 @@
+﻿@page
+@model RazorClient.Pages.Communities.TalkModel
+@{
+
+}
+<div class="pt-5 pb-5"></div>
+
+<div id="messagesContainer"></div>
+<input type="text" id="messageInput" placeholder="Enter message..." />
+<button id="sendMessageBtn">Send</button>
+
+<script src="https://cdn.jsdelivr.net/npm/@("@")microsoft/signalr@8.0.7/dist/browser/signalr.min.js"></script>
+<script>
+    const communityName = '@Model.Community.Name';
+
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/talkHub")
+        .build();
+
+    connection.on("ReceiveMessage", function (user, message) {
+        const msg = user + ": " + message;
+        const msgElement = document.createElement("div");
+        msgElement.textContent = msg;
+        document.getElementById("messagesContainer").appendChild(msgElement);
+    });
+
+    connection.start().then(function () {
+        console.log("Connected to SignalR Hub!");
+
+        connection.invoke("JoinGroup", communityName).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    document.getElementById("sendMessageBtn").addEventListener("click", function () {
+        const message = document.getElementById("messageInput").value;
+        const user = '@Model.CurrentUserName';
+
+        connection.invoke("SendMessage", communityName, user, message).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        document.getElementById("messageInput").value = "";
+    });
+</script>
