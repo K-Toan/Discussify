@@ -27,12 +27,13 @@ builder.Services.AddAuthentication(options =>
 });
 
 // services
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FeedService>();
 builder.Services.AddScoped<PostService>();
-builder.Services.AddScoped<SubscriptionService>();
 builder.Services.AddScoped<CommentService>();
-builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<OfflinePostService>();
+builder.Services.AddScoped<SubscriptionService>();
 
 var app = builder.Build();
 
